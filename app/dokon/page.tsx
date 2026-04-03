@@ -5,14 +5,14 @@ export default function Page() {
   const [data, setData] = useState([]);
 
   useEffect(() => {
-    fetch("http://127.0.0.1:8000/mashinalar")
+    fetch("http://127.0.0.1:8000/loyiham/")
       .then(r => r.json())
       .then(setData);
   }, []);
 
   return (
     <div>
-      <h1 className="text-4xl font-mono font-bold p-8 text-center">mashinalar sahifasi</h1>
+      <h1 className="text-4xl font-mono font-bold p-8 text-center">dokon</h1>
 
       <div>
         <ul>

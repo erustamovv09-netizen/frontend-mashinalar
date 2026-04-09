@@ -2,7 +2,7 @@ import Link from "next/link";
 
 async function getData() {
   // MUHIM: Port 8000 va oxirida / belgisiga e'tibor bering
-  const res = await fetch("http://127.0.0.1:8000/app/mahsulot/", {
+  const res = await fetch("http://127.0.0.1:8000/mahsulot/", {
     cache: "no-store",
   });
 
@@ -22,10 +22,11 @@ export default async function Page() {
   }
 
   return (
-    <div className="p-10 grid grid-cols-1 md:grid-cols-3 gap-6">
+    <div className="p-10 grid grid-cols-1 md:grid-cols-3 gap-6 bg-amber-200">
       {data.map((item: any) => (
         <div key={item.id} className="border p-4 rounded-lg shadow-md">
-          <Link href={`/application/${item.id}`}>
+          <img src={item.image} alt="" />
+          <Link href={`/apps/${item.id}`}>
             <h2 className="text-xl font-bold text-blue-600 hover:underline">
               {item.name}
             </h2>

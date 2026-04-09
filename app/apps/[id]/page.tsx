@@ -1,6 +1,6 @@
 // 1. Ma'lumot olish
 async function getData(id: string) {
-  const res = await fetch(`http://127.0.0.1:8000/app/mahsulot/${id}/`, { cache: "no-store" });
+  const res = await fetch(`http://127.0.0.1:8000/mahsulot/${id}/`, { cache: "no-store" });
   return res.json();
 }
 
@@ -11,6 +11,7 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
 
   return (
     <div className="p-5">
+      <img className="" src={data.image} alt="" />
       <h1 className="text-2xl font-bold">{data.name}</h1>
       <img src={data.images} alt="" className="w-64 my-4 rounded" />
       <p>Narxi: {data.price} $</p>

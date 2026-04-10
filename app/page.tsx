@@ -22,13 +22,12 @@ export default async function Page() {
   }
 
   return (
-    <div className="px-48 bg-amber-200">
-      <h1 className="text-4xl font-black font-serif text-center py-4 hover:text-6xl">Cars page</h1>
+    <div className="">
       <div className="p-10 grid grid-cols-1 md:grid-cols-3 gap-6">
       {data.map((item: any) => (
         <div key={item.id} className="border p-4 rounded-lg shadow-md">
           <img className="" src={item.image} alt="" />
-          <Link href={`/apps/${item.id}`}>
+          <Link href={`/cars/${item.id}`}>
             <h2 className="text-xl font-bold text-blue-600 hover:underline">
               {item.name}
             </h2>

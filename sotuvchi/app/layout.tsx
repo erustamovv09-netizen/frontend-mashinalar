@@ -24,10 +24,16 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
-      >
-        {children}
+      <body className="antialiased bg-gray-50">
+        {/* Navbar kodi shu yerda turadi */}
+        <nav className="fixed top-0 w-full z-50 border-b bg-white/95 backdrop-blur-md shadow-sm">
+          {/* ... siz yozgan Navbar ichki kodi ... */}
+        </nav>
+
+        {/* Sahifa mazmuni Navbar ostida qolib ketmasligi uchun padding (pt-24) beramiz */}
+        <main className="pt-24 container mx-auto px-4">
+          {children}
+        </main>
       </body>
     </html>
   );

@@ -1,3 +1,4 @@
+import CardImage from "@/components/CardImage";
 import Link from "next/link";
 
 async function getData() {
@@ -22,11 +23,13 @@ export default async function Page() {
   }
 
   return (
-    <div className="p-10 grid grid-cols-1 md:grid-cols-3 gap-6 bg-amber-200">
+    <div className="flex flex-col">
+      
+      <div className="p-10 grid grid-cols-1 md:grid-cols-3 gap-6 bg-amber-200">
       {data.map((item: any) => (
         <div key={item.id} className="border p-4 rounded-lg shadow-md">
           <img src={item.image} alt="" />
-          <Link href={`/apps/${item.id}`}>
+          <Link href={`/cars/${item.id}`}>
             <h2 className="text-xl font-bold text-blue-600 hover:underline">
               {item.name}
             </h2>
@@ -42,6 +45,9 @@ export default async function Page() {
           )}
         </div>
       ))}
+    </div>
+
+    <CardImage/>
     </div>
   );
 }

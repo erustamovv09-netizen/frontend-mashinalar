@@ -14,20 +14,14 @@ export default function PostCarPage() {
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setLoading(true);
-    console.log("Yuborish boshlandi..."); // Tekshirish uchun
 
     const formData = new FormData(e.currentTarget);
 
     try {
-      // MUHIM: URL oxirida / borligini tekshiring
       const res = await fetch("http://127.0.0.1:8000/mahsulot/", {
         method: "POST",
         body: formData,
-        // FormData yuborayotganda Content-Type sarlavhasini qo'lda yozmang!
-        // Brauzer uni avtomatik boundary bilan o'zi sozlaydi.
       });
-
-      console.log("Server javobi:", res.status);
 
       if (res.ok) {
         alert("E'lon muvaffaqiyatli qo'shildi!");
@@ -35,12 +29,10 @@ export default function PostCarPage() {
         router.refresh();
       } else {
         const errorData = await res.json();
-        console.error("Server xatosi:", errorData);
-        alert(`Xatolik: ${JSON.stringify(errorData)}`);
+        alert("Xatolik: " + JSON.stringify(errorData));
       }
     } catch (error) {
-      console.error("Fetch xatosi:", error);
-      alert("Server bilan aloqa bog'lanmadi. Django ishlayotganini tekshiring.");
+      alert("Server bilan aloqa bog'lanmadi.");
     } finally {
       setLoading(false);
     }
@@ -50,50 +42,85 @@ export default function PostCarPage() {
     <div className="container mx-auto py-12 px-4 max-w-2xl">
       <Card className="shadow-2xl border-none rounded-[32px] overflow-hidden">
         <CardHeader className="bg-zinc-900 text-white p-8">
-          <CardTitle className="text-3xl font-black uppercase italic tracking-wider">
-            Yangi <span className="text-red-600">E'lon</span> berish
+          <CardTitle className="text-3xl font-black uppercase italic text-center">
+            YANGI <span className="text-red-600">E'LON</span> BERISH
           </CardTitle>
         </CardHeader>
-        <CardContent className="p-8">
+        <CardContent className="p-8 bg-white">
           <form onSubmit={handleSubmit} className="space-y-6">
-            <div className="space-y-2">
-              <Label htmlFor="name">Mashina nomi</Label>
-              <Input name="name" id="name" placeholder="Masalan: BYD Song Plus" required className="rounded-xl h-12 text-black" />
-            </div>
-
-            <div className="grid grid-cols-2 gap-4">
+            
+            {/* 1-QATOR: Nomi va Brendi */}
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div className="space-y-2">
-                <Label htmlFor="price">Narxi ($)</Label>
-                <Input name="price" id="price" type="number" placeholder="32000" required className="rounded-xl h-12 text-black" />
+                <Label className="font-bold">Mashina nomi</Label>
+                <Input name="name" placeholder="Masalan: BYD Song Plus" required className="rounded-xl h-12" />
               </div>
               <div className="space-y-2">
-                <Label htmlFor="year">Yili</Label>
-                <Input name="year" id="year" type="number" placeholder="2024" required className="rounded-xl h-12 text-black" />
+                <Label className="font-bold">Brendi</Label>
+                <Input name="brand" placeholder="Masalan: BYD" required className="rounded-xl h-12" />
               </div>
             </div>
 
+            {/* 2-QATOR: Narxi va Yili */}
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div className="space-y-2">
+                <Label className="font-bold">Narxi ($)</Label>
+                <Input name="price" type="number" placeholder="32000" required className="rounded-xl h-12" />
+              </div>
+              <div className="space-y-2">
+                <Label className="font-bold">Yili</Label>
+                <Input name="year" type="number" placeholder="2024" required className="rounded-xl h-12" />
+              </div>
+            </div>
+
+            {/* 3-QATOR: Rangi va Yoqilg'i turi */}
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div className="space-y-2">
+                <Label className="font-bold">Rangi</Label>
+                <Input name="color" placeholder="Oq" required className="rounded-xl h-12" />
+              </div>
+              <div className="space-y-2">
+                <Label className="font-bold">Yoqilg'i turi</Label>
+                <Input name="fuel_type" placeholder="Benzin/Metan/Elektr" required className="rounded-xl h-12" />
+              </div>
+            </div>
+
+            {/* 4-QATOR: Uzatmalar qutisi va Dvigatel hajmi */}
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div className="space-y-2">
+                <Label className="font-bold">Uzatmalar qutisi</Label>
+                <Input name="transmission" placeholder="Avtomat/Mexanika" required className="rounded-xl h-12" />
+              </div>
+              <div className="space-y-2">
+                <Label className="font-bold">Dvigatel hajmi</Label>
+                <Input name="engine_volume" placeholder="1.5 L" required className="rounded-xl h-12" />
+              </div>
+            </div>
+
+            {/* TAVSIF - TO'LIQ QATOR */}
             <div className="space-y-2">
-              <Label htmlFor="description">Tavsif (Description)</Label>
+              <Label className="font-bold">Tavsif (Description)</Label>
               <textarea 
                 name="description" 
-                id="description" 
                 rows={4} 
-                className="w-full p-4 rounded-xl border border-zinc-200 focus:outline-none focus:ring-2 focus:ring-zinc-900 text-black"
+                className="w-full p-4 rounded-xl border border-zinc-200 focus:ring-2 focus:ring-red-600 outline-none transition-all"
                 placeholder="Mashina holati haqida yozing..."
               />
             </div>
 
+            {/* RASM - TO'LIQ QATOR */}
             <div className="space-y-2">
-              <Label htmlFor="image">Mashina rasmi</Label>
-              <Input name="image" id="image" type="file" accept="image/*" required className="rounded-xl h-12 pt-2 text-black" />
+              <Label className="font-bold">Mashina rasmi</Label>
+              <Input name="image" type="file" accept="image/*" required className="rounded-xl h-12 pt-2" />
             </div>
 
+            {/* TUGMA */}
             <Button 
               type="submit" 
               disabled={loading}
-              className="w-full h-16 bg-red-600 hover:bg-red-700 text-white font-black uppercase text-lg rounded-2xl transition-all shadow-lg active:scale-[0.98]"
+              className="w-full h-16 bg-red-600 hover:bg-red-700 text-white font-black uppercase rounded-2xl shadow-lg transition-all active:scale-95 mt-4"
             >
-              {loading ? "Yuborilmoqda..." : "E'lonni joylashtirish"}
+              {loading ? "YUBORILMOQDA..." : "E'LONNI JOYLASHTIRISH"}
             </Button>
           </form>
         </CardContent>

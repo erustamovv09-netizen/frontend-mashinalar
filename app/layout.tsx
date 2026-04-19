@@ -1,3 +1,4 @@
+// app/layout.tsx
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import "./globals.css";
@@ -15,11 +16,9 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
   return (
     <html lang="uz">
       <body className={cn(inter.className, "antialiased bg-[#FAFAFA] text-zinc-900")}>
-
-        {/* --- NAVBAR --- */}
+        {/* NAVBAR */}
         <nav className="border-b border-zinc-100 bg-white/80 backdrop-blur-md sticky top-0 z-50 h-20 flex items-center">
           <div className="container mx-auto px-6 flex items-center justify-between gap-8 w-full">
-
             {/* LOGO */}
             <Link href="/" className="flex items-center gap-2 flex-shrink-0 group">
               <div className="bg-red-600 p-2 rounded-xl shadow-lg shadow-red-200 group-hover:rotate-6 transition-transform">
@@ -33,14 +32,12 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
               </span>
             </Link>
 
-            {/* --- QIDIRUV (FAQAT SHU QISMNI ALMASHTIRING) --- */}
+            {/* QIDIRUV */}
             <div className="flex-1 max-w-md mx-6 relative">
               <div className="relative flex items-center">
-                {/* Ikonkani matndan mutlaqo ajratib, chapga qotiramiz */}
                 <span className="absolute left-4 text-zinc-400 z-10 select-none pointer-events-none">
                   🔍
                 </span>
-
                 <input
                   type="text"
                   placeholder="Qidiruv..."

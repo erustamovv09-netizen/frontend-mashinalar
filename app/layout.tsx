@@ -1,9 +1,10 @@
-// app/layout.tsx
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import "./globals.css";
 import { cn } from "@/lib/utils";
 import Link from "next/link";
+// 1. Footerni import qilamiz (manzilini tekshirib ko'r, ehtimol ./components/Footer bo'lishi mumkin)
+import Footer from "@/components/Footer"; 
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -50,8 +51,12 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
 
             {/* NAV LINKS */}
             <div className="flex items-center gap-8 flex-shrink-0">
-              <Link href="/" className="text-[11px] font-black uppercase tracking-widest hover:text-red-600 transition-colors">Bosh sahifa</Link>
-              <Link href="/cars" className="text-[11px] font-black uppercase tracking-widest text-red-600 border-b-2 border-red-600 pb-1">Mashinalar</Link>
+              <Link href="/" className="text-[11px] font-black uppercase tracking-widest hover:text-red-600 transition-colors">
+                Bosh sahifa
+              </Link>
+              <Link href="/cars" className="text-[11px] font-black uppercase tracking-widest hover:text-red-600 transition-colors">
+                Mashinalar
+              </Link>
               <Link href="/admin">
                 <button className="bg-zinc-900 hover:bg-red-600 text-white font-bold uppercase rounded-xl px-6 h-11 transition-all active:scale-95 shadow-xl shadow-zinc-200 text-[11px] tracking-wider">
                   E'lon berish +
@@ -61,7 +66,13 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           </div>
         </nav>
 
-        {children}
+        {/* ASOSIY KONTENT */}
+        <main>
+          {children}
+        </main>
+
+        {/* 2. FOOTER - Har doim eng pastda chiqadi */}
+        <Footer />
       </body>
     </html>
   );

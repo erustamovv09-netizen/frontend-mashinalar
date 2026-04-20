@@ -5,7 +5,6 @@ import { Card, CardHeader, CardTitle } from "@/components/ui/card";
 import Link from "next/link";
 import Image from "next/image";
 import { Badge } from "@/components/ui/badge";
-import Footer from "@/components/Footer";
 import Partners from "@/components/Partners";
 import Hero from "@/components/Hero";
 
@@ -77,7 +76,6 @@ export default async function Home() {
         </div>
       </div>
 
-      <Footer />
     </>
   );
 }

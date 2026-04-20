@@ -10,7 +10,7 @@ import Partners from "@/components/Partners";
 import Hero from "@/components/Hero";
 
 async function getData() {
-  const res = await fetch("http://127.0.0.1:8000/mahsulot/", { 
+  const res = await fetch("http://127.0.0.1:8000/mahsulot/", {
     cache: 'no-store',
     next: { revalidate: 0 } // Dynamic rendering
   });
@@ -23,10 +23,10 @@ export default async function Home() {
 
   return (
     <>
-      
+
+      <Hero />
       <div className="container mx-auto px-4 py-12">
         <Partners />
-
         {/* Bo'lim sarlavhasi */}
         <div className="text-center mb-12">
           <h2 className="text-3xl md:text-4xl font-black uppercase italic mb-4">
@@ -64,8 +64,8 @@ export default async function Home() {
                   <span className="text-3xl font-black text-green-600">
                     {Number(item.price).toLocaleString()}$
                   </span>
-                  <Link 
-                    href={`/cars/${item.id}`} 
+                  <Link
+                    href={`/cars/${item.id}`}
                     className="bg-zinc-900 text-white px-6 py-2 rounded-xl font-bold uppercase text-sm hover:bg-red-600 transition-colors"
                   >
                     Batafsil
@@ -76,7 +76,7 @@ export default async function Home() {
           ))}
         </div>
       </div>
-      
+
       <Footer />
     </>
   );

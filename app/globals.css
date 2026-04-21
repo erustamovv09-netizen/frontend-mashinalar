@@ -121,10 +121,15 @@
   * {
     @apply border-border outline-ring/50;
   }
+
   body {
     @apply bg-background text-foreground;
-    
+
+    html {
+      scroll-behavior: smooth;
+    }
   }
+
   html {
     @apply font-sans;
   }
@@ -136,7 +141,12 @@
   --animate-infinite-scroll: infinite-scroll 40s linear infinite;
 
   @keyframes infinite-scroll {
-    from { transform: translateX(0); }
-    to { transform: translateX(-100%); }
+    from {
+      transform: translateX(0);
+    }
+
+    to {
+      transform: translateX(-100%);
+    }
   }
 }

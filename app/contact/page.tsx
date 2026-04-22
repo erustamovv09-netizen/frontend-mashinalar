@@ -78,7 +78,7 @@ export default function ContactPage() {
               <a href="tel:+998901234567" className="bg-white/10 hover:bg-white/20 p-6 rounded-2xl transition-all">
                 <div className="text-2xl mb-2">📞</div>
                 <p className="text-[10px] font-black uppercase opacity-60">Telefon</p>
-                <p className="font-bold text-sm">90 123 45 67</p>
+                <p className="font-bold text-sm">+998 (90) 123-45-67</p>
               </a>
 
               {/* Telegram - Logo o'zgardi */}

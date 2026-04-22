@@ -37,7 +37,7 @@ export default function Footer() {
               <Link href="/about" className="text-sm font-bold text-zinc-900 hover:text-red-600 transition-colors w-fit">
                 Biz haqimizda
               </Link>
-              <Link href="#footer" className="text-sm font-bold text-zinc-900 hover:text-red-600 transition-colors w-fit">
+              <Link href="/contact" className="text-sm font-bold text-zinc-900 hover:text-red-600 transition-colors w-fit">
                 Kontakt
               </Link>
             </nav>

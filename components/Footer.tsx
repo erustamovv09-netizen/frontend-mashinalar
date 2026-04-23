@@ -28,7 +28,7 @@ export default function Footer() {
           <div className="flex flex-col gap-4">
             <h4 className="text-[11px] font-black uppercase tracking-[0.2em] text-zinc-400">Menyu</h4>
             <nav className="flex flex-col gap-3">
-              <Link href="/page" className="text-sm font-bold text-zinc-900 hover:text-red-600 transition-colors w-fit">
+              <Link href="/" className="text-sm font-bold text-zinc-900 hover:text-red-600 transition-colors w-fit">
                 Bosh sahifa
               </Link>
               <Link href="/cars" className="text-sm font-bold text-zinc-900 hover:text-red-600 transition-colors w-fit">

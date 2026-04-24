@@ -20,6 +20,14 @@ async function getData() {
 export default async function Page() {
   const data = await getData();
 
+  if (!data || data.length === 0) {
+    return (
+      <div className="flex justify-center items-center min-h-[50vh]">
+        <p className="text-gray-500">Hozircha sotuvda mashinalar yo'q.</p>
+      </div>
+    );
+  }
+
   return (
     <main className="min-h-screen bg-zinc-50 py-10 px-4 md:px-10">
       <div className="max-w-7xl mx-auto">
@@ -46,7 +54,7 @@ export default async function Page() {
 
               <div className="p-4">
                 <Link href={`/cars/${item.id}`}>
-                  <h2 className="text-lg font-bold text-zinc-900 hover:text-red-600 transition-colors line-clamp-1 italic uppercase tracking-tight">
+                  <h2 className="text-lg font-bold text-zinc-900 hover:text-red-600 transition-colors line-clamp-1">
                     {item.name}
                   </h2>
                 </Link>
@@ -57,12 +65,12 @@ export default async function Page() {
                   </span>
                 </div>
 
-                <p className="text-zinc-500 text-sm mt-3 line-clamp-2 leading-relaxed font-medium">
+                <p className="text-zinc-500 text-sm mt-3 line-clamp-2 leading-relaxed">
                   {item.description}
                 </p>
 
                 <Link href={`/cars/${item.id}`} className="block mt-4">
-                  <button className="w-full py-2.5 bg-zinc-900 hover:bg-red-600 text-white text-xs font-bold uppercase rounded-xl transition-all active:scale-95 italic">
+                  <button className="w-full py-2.5 bg-zinc-900 hover:bg-red-600 text-white text-xs font-bold uppercase rounded-xl transition-all active:scale-95">
                     Batafsil ko'rish
                   </button>
                 </Link>

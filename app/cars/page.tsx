@@ -3,7 +3,7 @@ import Link from "next/link";
 async function getData() {
   try {
     const res = await fetch("http://127.0.0.1:8000/mahsulot/", {
-      cache: "no-store", 
+      cache: "no-store",
     });
 
     if (!res.ok) {
@@ -13,7 +13,7 @@ async function getData() {
     return await res.json();
   } catch (error) {
     console.error("Backend ulanishida xato:", error);
-    return []; 
+    return [];
   }
 }
 
@@ -23,7 +23,7 @@ export default async function Page() {
   if (!data || data.length === 0) {
     return (
       <div className="flex justify-center items-center min-h-[50vh]">
-        <p className="text-gray-500">Hozircha sotuvda mashinalar yo'q.</p>
+        <p className="text-gray-500 font-bold uppercase italic">Hozircha bazada mashinalar yo'q.</p>
       </div>
     );
   }
@@ -37,14 +37,14 @@ export default async function Page() {
 
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
           {data.map((item: any) => (
-            <div 
-              key={item.id} 
+            <div
+              key={item.id}
               className="bg-white border border-zinc-200 rounded-2xl overflow-hidden shadow-sm hover:shadow-xl transition-all duration-300 group"
             >
               <div className="relative h-48 overflow-hidden">
-                <img 
-                  src={item.image || "/no-image.jpg"} 
-                  alt={item.name} 
+                <img
+                  src={item.image || "/no-image.jpg"}
+                  alt={item.name}
                   className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
                 />
                 <div className="absolute top-3 left-3 bg-red-600 text-white text-[10px] font-bold px-2 py-1 rounded-md uppercase">
@@ -54,23 +54,23 @@ export default async function Page() {
 
               <div className="p-4">
                 <Link href={`/cars/${item.id}`}>
-                  <h2 className="text-lg font-bold text-zinc-900 hover:text-red-600 transition-colors line-clamp-1">
+                  <h2 className="text-lg font-bold text-zinc-900 hover:text-red-600 transition-colors line-clamp-1 italic uppercase tracking-tight">
                     {item.name}
                   </h2>
                 </Link>
-                
+
                 <div className="flex items-center justify-between mt-3">
                   <span className="text-2xl font-black text-zinc-900">
                     {Number(item.price).toLocaleString()} <span className="text-xl text-red-600">$</span>
                   </span>
                 </div>
 
-                <p className="text-zinc-500 text-sm mt-3 line-clamp-2 leading-relaxed">
+                <p className="text-zinc-500 text-sm mt-3 line-clamp-2 leading-relaxed font-medium">
                   {item.description}
                 </p>
 
                 <Link href={`/cars/${item.id}`} className="block mt-4">
-                  <button className="w-full py-2.5 bg-zinc-900 hover:bg-red-600 text-white text-xs font-bold uppercase rounded-xl transition-all active:scale-95">
+                  <button className="w-full py-2.5 bg-zinc-900 hover:bg-red-600 text-white text-xs font-bold uppercase rounded-xl transition-all active:scale-95 italic">
                     Batafsil ko'rish
                   </button>
                 </Link>

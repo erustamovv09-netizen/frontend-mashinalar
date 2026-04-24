@@ -28,7 +28,7 @@ const slides = [
     subtitle: "24/7 QO'LLAB-QUVVATLASH",
     description: "Savollaringiz bormi? Mutaxassislarimiz yordamga tayyor.",
     image: "https://images.unsplash.com/photo-1555353540-64580b51c258?q=80&w=2036&auto=format&fit=crop", 
-    link: "#footer",
+    link: "footer",
     btnText: "Bog'lanish"
   }
 ];

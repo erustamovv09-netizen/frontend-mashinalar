@@ -11,7 +11,7 @@ import Hero from "@/components/Hero";
 async function getData() {
   const res = await fetch("http://127.0.0.1:8000/mahsulot/", {
     cache: 'no-store',
-    next: { revalidate: 0 } // Dynamic rendering
+    next: { revalidate: 0 }
   });
   if (!res.ok) return [];
   return res.json();

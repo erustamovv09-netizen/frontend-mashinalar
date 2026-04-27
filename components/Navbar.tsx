@@ -34,7 +34,7 @@ export default function Navbar() {
           </span>
         </Link>
 
-        {/* QIDIRUV - FORM QILDIK */}
+        {/* QIDIRUV- FORM QILDIK */}
         <form onSubmit={handleSearch} className="flex-1 max-w-md relative px-4 flex items-center">
           <span className="absolute left-8 text-zinc-400 z-10">🔍</span>
           <input 

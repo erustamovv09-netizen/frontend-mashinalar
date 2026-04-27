@@ -58,7 +58,6 @@ export default function Hero() {
             <div className="absolute inset-0 bg-gradient-to-r from-white via-white/80 to-transparent" />
           </div>
 
-
           <div className="relative h-full container mx-auto px-6 flex flex-col justify-center items-start">
             <div className="max-w-2xl space-y-5">
               <span className="inline-block px-3 py-1 bg-red-600 text-white text-[10px] font-black uppercase tracking-widest rounded">

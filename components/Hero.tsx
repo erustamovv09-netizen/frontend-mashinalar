@@ -68,6 +68,7 @@ export default function Hero() {
                 {slide.title}
               </h1>
               <p className="text-zinc-600 text-sm md:text-lg font-medium max-w-md">{slide.description}</p>
+
               <div className="pt-4">
                 <a 
                   href={slide.link}

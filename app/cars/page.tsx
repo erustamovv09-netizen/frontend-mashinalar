@@ -1,6 +1,3 @@
-app/cars/page.tsx kodi
-
-
 import Link from "next/link";
 
 async function getData() {

@@ -1,7 +1,7 @@
 "use client";
 
-import { useState } from "react"; // Qo'shildi
-import { useRouter } from "next/navigation"; // Qo'shildi
+import { useState } from "react";
+import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 
@@ -10,10 +10,11 @@ export default function Navbar() {
   const router = useRouter();
 
   const handleSearch = (e: React.FormEvent) => {
-    e.preventDefault();
+    e.preventDefault(); // Sahifa yangilanib ketishini to'xtatamiz
+    
+    // Qidiruv so'zi bo'lsa Katalog sahifasiga yo'naltiramiz
     if (searchQuery.trim()) {
-      // Qidiruv so'zi bilan mashinalar sahifasiga o'tamiz
-      router.push(`/cars?search=${searchQuery}`);
+      router.push(`/cars?search=${encodeURIComponent(searchQuery.trim())}`);
     } else {
       router.push("/cars");
     }
@@ -34,25 +35,26 @@ export default function Navbar() {
           </span>
         </Link>
 
-        {/* QIDIRUV - FORM QILDIK */}
+        {/* QIDIRUV - FORM (MUHIM JOYI) */}
         <form onSubmit={handleSearch} className="flex-1 max-w-md relative px-4 flex items-center">
           <span className="absolute left-8 text-zinc-400 z-10">🔍</span>
           <input 
             type="text"
+            name="search"
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
             placeholder="Mashina qidirish..."
+            autoComplete="off"
             className="w-full h-11 bg-zinc-50 border border-zinc-200 rounded-full pl-12 pr-4 outline-none focus:ring-1 focus:ring-red-500 text-sm transition-all font-medium"
           />
         </form>
 
-        {/* LINKLAR VA TUGMA */}
-        <div className="flex items-center gap-6 flex-shrink-0">
-          <Link href="/" className="font-bold uppercase text-[12px] hover:text-red-600 transition-colors hidden sm:block">
-            Bosh sahifa
-          </Link>
-          <Link href="/admin"> {/* Senda admin papkasida ekan */}
-            <Button className="bg-red-600 hover:bg-red-700 text-white font-black uppercase rounded-full px-6 h-11 shadow-lg shadow-red-100">
+        {/* LINKLAR */}
+        <div className="flex items-center gap-6 flex-shrink-0 font-bold uppercase text-[12px]">
+          <Link href="/" className="hover:text-red-600 transition-colors hidden sm:block">Bosh sahifa</Link>
+          <Link href="/cars" className="hover:text-red-600 transition-colors hidden sm:block">Mashinalar</Link>
+          <Link href="/admin">
+            <Button className="bg-red-600 hover:bg-red-700 text-white font-black uppercase rounded-full px-6 h-11 shadow-lg active:scale-95 transition-all">
               E'lon berish +
             </Button>
           </Link>

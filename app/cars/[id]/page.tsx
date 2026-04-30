@@ -1,6 +1,18 @@
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
+import { 
+  Phone, 
+  MessageCircle, 
+  Send, 
+  Calendar, 
+  Fuel, 
+  Settings, 
+  Gauge, 
+  Palette,
+  ShieldCheck,
+  MapPin
+} from "lucide-react";
 import Link from "next/link";
 
 async function getSingleCar(id: string) {
@@ -21,9 +33,10 @@ export default async function CarDetailPage({ params }: { params: any }) {
 
   if (!car) {
     return (
-      <div className="flex items-center justify-center min-h-screen">
-        <Button asChild variant="outline">
-          <Link href="/">Ma'lumot topilmadi. Orqaga qaytish</Link>
+      <div className="flex flex-col items-center justify-center min-h-screen gap-4">
+        <h2 className="text-2xl font-bold italic uppercase">Ma'lumot topilmadi</h2>
+        <Button asChild variant="outline" className="rounded-full px-8">
+          <Link href="/cars">Katalogga qaytish</Link>
         </Button>
       </div>
     );
@@ -33,100 +46,123 @@ export default async function CarDetailPage({ params }: { params: any }) {
     ? (car.image.startsWith('http') ? car.image : `http://127.0.0.1:8000${car.image}`)
     : '/placeholder.jpg';
 
+  // Bog'lanish uchun raqam (bazada bo'lmasa default raqam)
+  const phoneNumber = car.owner_phone || "+998901234567";
+  const messageText = `Assalomu alaykum! AVTOBOZOR saytida ko'rgan ${car.name} mashinangiz bo'yicha bog'lanayotgan edim.`;
+
   return (
     <div className="min-h-screen bg-zinc-50/50 pb-20">
-      <div className="container mx-auto px-4 py-8 max-w-6xl">
-        <Link href="/" className="inline-flex items-center text-sm font-medium text-zinc-500 hover:text-black mb-8 transition-colors group">
-          <span className="group-hover:-translate-x-1 transition-transform">←</span> &nbsp; BOSH SAHIFA / MASHINALAR
-        </Link>
+      <div className="container mx-auto px-4 py-8 max-w-7xl">
+        
+        {/* BREADCRUMBS */}
+        <div className="flex items-center gap-2 text-[10px] font-bold text-zinc-400 mb-8 uppercase tracking-[0.2em]">
+          <Link href="/" className="hover:text-red-600">BOSH SAHIFA</Link>
+          <span>/</span>
+          <Link href="/cars" className="hover:text-red-600">MASHINALAR</Link>
+          <span>/</span>
+          <span className="text-zinc-900">{car.name}</span>
+        </div>
 
-        <div className="bg-white rounded-[32px] shadow-xl shadow-zinc-200/50 overflow-hidden border border-zinc-100">
-          <div className="grid grid-cols-1 lg:grid-cols-2">
-
-            {/* CHAP TOMON: RASM */}
-            <div className="relative h-[400px] md:h-[500px] lg:h-full min-h-[600px] bg-zinc-100 overflow-hidden">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
+          
+          {/* CHAP TOMON: RASM (8 qator) */}
+          <div className="lg:col-span-8 space-y-6">
+            <div className="relative aspect-[16/10] bg-white rounded-[40px] overflow-hidden shadow-2xl shadow-zinc-200 border border-white">
               <img
                 src={imageUrl}
                 alt={car.name}
-                className="w-full h-full object-cover transition-transform duration-1000 hover:scale-105"
+                className="w-full h-full object-cover"
               />
-              <Badge className="absolute bottom-6 left-6 bg-red-600 text-white px-6 py-2 rounded-full text-sm font-black shadow-2xl uppercase tracking-widest">
-                {car.year}-YIL
-              </Badge>
+              <div className="absolute top-6 left-6 flex gap-2">
+                <Badge className="bg-white/90 backdrop-blur text-black px-4 py-2 rounded-2xl text-xs font-black shadow-xl border-none uppercase">
+                  {car.year}-YIL
+                </Badge>
+                <Badge className="bg-red-600 text-white px-4 py-2 rounded-2xl text-xs font-black shadow-xl border-none uppercase tracking-widest">
+                  YANGI
+                </Badge>
+              </div>
             </div>
 
-            {/* O'NG TOMON */}
-            <div className="p-8 lg:p-12 flex flex-col justify-between bg-white">
-              <div>
-                <h1 className="text-4xl lg:text-5xl font-black text-zinc-900 tracking-tight leading-tight mb-4 uppercase italic">
+            {/* QO'SHIMCHA TAVSIF PANEL */}
+            <div className="bg-white rounded-[32px] p-8 border border-zinc-100 shadow-sm">
+              <h3 className="text-sm font-black uppercase tracking-[0.3em] text-zinc-400 mb-6 flex items-center gap-2">
+                <ShieldCheck className="w-4 h-4 text-red-600" /> Avtomobil haqida ma'lumot
+              </h3>
+              <p className="text-zinc-600 leading-relaxed text-lg font-medium italic">
+                {car.description || "Ushbu avtomobil Shahrisabzda joylashgan bo'lib, barcha texnik ko'rikdan o'tgan. To'liq ma'lumot olish uchun sotuvchi bilan bog'laning."}
+              </p>
+            </div>
+          </div>
+
+          {/* O'NG TOMON: NARX VA PARAMETRLAR (4 qator) */}
+          <div className="lg:col-span-4 space-y-6">
+            <div className="bg-white rounded-[32px] p-8 border border-zinc-100 shadow-xl shadow-zinc-200/50 sticky top-28">
+              <div className="mb-6">
+                <h1 className="text-4xl font-black text-zinc-900 tracking-tighter leading-none uppercase italic mb-2">
                   {car.name}
                 </h1>
-
-                <div className="flex items-center gap-4 mb-8">
-                  <span className="text-4xl font-black text-green-600 italic">
-                    {Number(car.price).toLocaleString()}$
-                  </span>
-                  <div className="h-6 w-[2px] bg-zinc-200"></div>
-                  <span className="text-[10px] font-bold text-zinc-400 uppercase tracking-[0.2em] bg-zinc-50 px-3 py-1.5 rounded-lg border border-zinc-100">
-                    Bojxonadan o'tgan
-                  </span>
-                </div>
-
-                <Separator className="my-8" />
-
-                <div className="space-y-8">
-                  <div>
-                    <h3 className="text-[11px] font-black uppercase tracking-[0.3em] text-zinc-400 mb-4">Tavsif</h3>
-                    <p className="text-zinc-600 leading-relaxed text-lg font-medium">
-                      {car.description || "Ushbu mahsulot haqida batafsil ma'lumot kiritilmagan."}
-                    </p>
-                  </div>
-
-                  {/* PARAMETRLAR GRIDI */}
-                  <div className="grid grid-cols-2 gap-4">
-                    <div className="p-5 rounded-3xl bg-zinc-50 border border-zinc-100">
-                      <p className="text-[10px] font-bold uppercase text-zinc-400 mb-2 tracking-widest">Brend</p>
-                      <p className="font-black text-zinc-900 text-xl uppercase italic">{car.brand || "---"}</p>
-                    </div>
-                    <div className="p-5 rounded-3xl bg-zinc-50 border border-zinc-100">
-                      <p className="text-[10px] font-bold uppercase text-zinc-400 mb-2 tracking-widest">Yili</p>
-                      <p className="font-black text-zinc-900 text-xl italic">{car.year} yil</p>
-                    </div>
-                    <div className="p-5 rounded-3xl bg-zinc-50 border border-zinc-100">
-                      <p className="text-[10px] font-bold uppercase text-zinc-400 mb-2 tracking-widest">Transmissiya</p>
-                      <p className="font-black text-zinc-900 text-xl italic">{car.transmission || "---"}</p>
-                    </div>
-                    <div className="p-5 rounded-3xl bg-zinc-50 border border-zinc-100">
-                      <p className="text-[10px] font-bold uppercase text-zinc-400 mb-2 tracking-widest">Yoqilg'i turi</p>
-                      <p className="font-black text-zinc-900 text-xl italic">{car.fuel_type || "---"}</p>
-                    </div>
-                    <div className="p-5 rounded-3xl bg-zinc-50 border border-zinc-100">
-                      <p className="text-[10px] font-bold uppercase text-zinc-400 mb-2 tracking-widest">Dvigatel hajmi</p>
-                      <p className="font-black text-zinc-900 text-xl italic">{car.engine_volume || "---"}</p>
-                    </div>
-                    <div className="p-5 rounded-3xl bg-zinc-50 border border-zinc-100">
-                      <p className="text-[10px] font-bold uppercase text-zinc-400 mb-2 tracking-widest">Rangi</p>
-                      <p className="font-black text-zinc-900 text-xl italic">{car.color || "---"}</p>
-                    </div>
-
-                    {/* HOLATI - OXIRIDA VA MARKAZDA */}
-                    <div className="p-5 rounded-3xl bg-zinc-50 border border-zinc-100 col-span-2 flex flex-col items-center justify-center text-center">
-                      <p className="text-[10px] font-bold uppercase text-zinc-400 mb-2 tracking-widest">Holati</p>
-                      <p className="font-black text-green-600 text-2xl italic uppercase tracking-widest">Yangi</p>
-                    </div>
-                  </div>
+                <div className="flex items-center gap-2 text-zinc-400 text-xs font-bold">
+                  <MapPin className="w-3 h-3 text-red-600" /> SHAHRISABZ, O'ZBEKISTON
                 </div>
               </div>
 
-              {/* TUGMA */}
-              <div className="mt-24">
-                <Button className="w-full h-20 text-xl font-black uppercase rounded-2xl bg-zinc-900 hover:bg-red-600 text-white transition-all duration-500 shadow-2xl shadow-zinc-300 active:scale-[0.97]">
-                  Sotuvchi bilan bog'lanish
-                </Button>
+              <div className="flex items-baseline gap-2 mb-8">
+                <span className="text-5xl font-black text-zinc-900 italic tracking-tighter">
+                  {Number(car.price).toLocaleString()}
+                </span>
+                <span className="text-2xl font-bold text-red-600">$</span>
+              </div>
+
+              <div className="grid grid-cols-2 gap-3 mb-8">
+                <div className="p-4 rounded-2xl bg-zinc-50 border border-zinc-100">
+                  <div className="flex items-center gap-2 text-[10px] font-bold text-zinc-400 uppercase mb-1">
+                    <Settings className="w-3 h-3" /> Transmissiya
+                  </div>
+                  <p className="font-black text-zinc-900 text-sm italic">{car.transmission || "Avtomat"}</p>
+                </div>
+                <div className="p-4 rounded-2xl bg-zinc-50 border border-zinc-100">
+                  <div className="flex items-center gap-2 text-[10px] font-bold text-zinc-400 uppercase mb-1">
+                    <Fuel className="w-3 h-3" /> Yoqilg'i
+                  </div>
+                  <p className="font-black text-zinc-900 text-sm italic">{car.fuel_type || "Elektr"}</p>
+                </div>
+                <div className="p-4 rounded-2xl bg-zinc-50 border border-zinc-100">
+                  <div className="flex items-center gap-2 text-[10px] font-bold text-zinc-400 uppercase mb-1">
+                    <Gauge className="w-3 h-3" /> Dvigatel
+                  </div>
+                  <p className="font-black text-zinc-900 text-sm italic">{car.engine_volume || "0.0 L"}</p>
+                </div>
+                <div className="p-4 rounded-2xl bg-zinc-50 border border-zinc-100">
+                  <div className="flex items-center gap-2 text-[10px] font-bold text-zinc-400 uppercase mb-1">
+                    <Palette className="w-3 h-3" /> Rangi
+                  </div>
+                  <p className="font-black text-zinc-900 text-sm italic">{car.color || "Oq"}</p>
+                </div>
+              </div>
+
+              {/* BOG'LANISH TUGMALARI */}
+              <div className="space-y-3">
+                <a href={`tel:${phoneNumber}`} className="block">
+                  <Button className="w-full h-16 text-xs font-black uppercase rounded-2xl bg-zinc-900 hover:bg-black text-white transition-all shadow-xl active:scale-95 italic tracking-widest gap-3">
+                    <Phone className="w-4 h-4 fill-white" /> Telefon orqali bog'lanish
+                  </Button>
+                </a>
+                <div className="grid grid-cols-2 gap-3">
+                  <a href={`https://t.me/+998901234567`} target="_blank" className="block">
+                    <Button variant="outline" className="w-full h-14 rounded-2xl border-zinc-200 hover:bg-sky-50 hover:text-sky-600 hover:border-sky-200 transition-all active:scale-95 italic uppercase text-[10px] font-black gap-2">
+                      <Send className="w-4 h-4" /> Telegram
+                    </Button>
+                  </a>
+                  <a href={`https://wa.me/${phoneNumber.replace('+', '')}?text=${encodeURIComponent(messageText)}`} target="_blank" className="block">
+                    <Button variant="outline" className="w-full h-14 rounded-2xl border-zinc-200 hover:bg-green-50 hover:text-green-600 hover:border-green-200 transition-all active:scale-95 italic uppercase text-[10px] font-black gap-2">
+                      <MessageCircle className="w-4 h-4" /> WhatsApp
+                    </Button>
+                  </a>
+                </div>
               </div>
             </div>
-
           </div>
+          
         </div>
       </div>
     </div>

@@ -1,14 +1,14 @@
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
-import { 
-  Phone, 
-  MessageCircle, 
-  Send, 
-  Calendar, 
-  Fuel, 
-  Settings, 
-  Gauge, 
+import {
+  Phone,
+  MessageCircle,
+  Send,
+  Calendar,
+  Fuel,
+  Settings,
+  Gauge,
   Palette,
   ShieldCheck,
   MapPin
@@ -46,14 +46,13 @@ export default async function CarDetailPage({ params }: { params: any }) {
     ? (car.image.startsWith('http') ? car.image : `http://127.0.0.1:8000${car.image}`)
     : '/placeholder.jpg';
 
-  // Bog'lanish uchun raqam (bazada bo'lmasa default raqam)
   const phoneNumber = car.owner_phone || "+998901234567";
   const messageText = `Assalomu alaykum! AVTOBOZOR saytida ko'rgan ${car.name} mashinangiz bo'yicha bog'lanayotgan edim.`;
 
   return (
     <div className="min-h-screen bg-zinc-50/50 pb-20">
       <div className="container mx-auto px-4 py-8 max-w-7xl">
-        
+
         {/* BREADCRUMBS */}
         <div className="flex items-center gap-2 text-[10px] font-bold text-zinc-400 mb-8 uppercase tracking-[0.2em]">
           <Link href="/" className="hover:text-red-600">BOSH SAHIFA</Link>
@@ -63,9 +62,10 @@ export default async function CarDetailPage({ params }: { params: any }) {
           <span className="text-zinc-900">{car.name}</span>
         </div>
 
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
-          
-          {/* CHAP TOMON: RASM (8 qator) */}
+        {/* items-start klassi o'ng tomonni to'g'ri tushishi uchun muhim */}
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+
+          {/* CHAP TOMON: RASM */}
           <div className="lg:col-span-8 space-y-6">
             <div className="relative aspect-[16/10] bg-white rounded-[40px] overflow-hidden shadow-2xl shadow-zinc-200 border border-white">
               <img
@@ -83,7 +83,6 @@ export default async function CarDetailPage({ params }: { params: any }) {
               </div>
             </div>
 
-            {/* QO'SHIMCHA TAVSIF PANEL */}
             <div className="bg-white rounded-[32px] p-8 border border-zinc-100 shadow-sm">
               <h3 className="text-sm font-black uppercase tracking-[0.3em] text-zinc-400 mb-6 flex items-center gap-2">
                 <ShieldCheck className="w-4 h-4 text-red-600" /> Avtomobil haqida ma'lumot
@@ -94,9 +93,9 @@ export default async function CarDetailPage({ params }: { params: any }) {
             </div>
           </div>
 
-          {/* O'NG TOMON: NARX VA PARAMETRLAR (4 qator) */}
-          <div className="lg:col-span-4 space-y-6">
-            <div className="bg-white rounded-[32px] p-8 border border-zinc-100 shadow-xl shadow-zinc-200/50 sticky top-28">
+          {/* O'NG TOMON: NARX VA PARAMETRLAR (STICKY) */}
+          <div className="lg:col-span-4 lg:sticky lg:top-28 transition-all">
+            <div className="bg-white rounded-[32px] p-8 border border-zinc-100 shadow-xl shadow-zinc-200/50">
               <div className="mb-6">
                 <h1 className="text-4xl font-black text-zinc-900 tracking-tighter leading-none uppercase italic mb-2">
                   {car.name}
@@ -110,7 +109,7 @@ export default async function CarDetailPage({ params }: { params: any }) {
                 <span className="text-5xl font-black text-zinc-900 italic tracking-tighter">
                   {Number(car.price).toLocaleString()}
                 </span>
-                <span className="text-2xl font-bold text-red-600">$</span>
+                <span className="text-4xl font-bold text-red-600">$</span>
               </div>
 
               <div className="grid grid-cols-2 gap-3 mb-8">
@@ -142,27 +141,53 @@ export default async function CarDetailPage({ params }: { params: any }) {
 
               {/* BOG'LANISH TUGMALARI */}
               <div className="space-y-3">
-                <a href={`tel:${phoneNumber}`} className="block">
-                  <Button className="w-full h-16 text-xs font-black uppercase rounded-2xl bg-zinc-900 hover:bg-black text-white transition-all shadow-xl active:scale-95 italic tracking-widest gap-3">
+                <a href={`tel:${phoneNumber}`} className="block cursor-pointer">
+                  <Button className="w-full h-16 text-xs font-black uppercase rounded-2xl bg-zinc-900 hover:!bg-black text-white transition-all shadow-xl active:scale-95 italic tracking-widest gap-3 cursor-pointer">
                     <Phone className="w-4 h-4 fill-white" /> Telefon orqali bog'lanish
                   </Button>
                 </a>
+
                 <div className="grid grid-cols-2 gap-3">
-                  <a href={`https://t.me/+998901234567`} target="_blank" className="block">
-                    <Button variant="outline" className="w-full h-14 rounded-2xl border-zinc-200 hover:bg-sky-50 hover:text-sky-600 hover:border-sky-200 transition-all active:scale-95 italic uppercase text-[10px] font-black gap-2">
-                      <Send className="w-4 h-4" /> Telegram
+                  {/* Telegram - Hoverda KO'K rang */}
+                  <a href={`https://t.me/Rustamovv_E`} target="_blank" className="block cursor-pointer group">
+                    <Button
+                      variant="outline"
+                      className="w-full h-14 rounded-2xl border-zinc-200 hover:!bg-[#0088cc] hover:!text-white hover:!border-[#0088cc] transition-all active:scale-95 italic uppercase text-[10px] font-black gap-2 cursor-pointer group"
+                    >
+                      <Send className="w-4 h-4 text-[#0088cc] group-hover:text-white transition-colors" />
+                      Telegram
                     </Button>
                   </a>
-                  <a href={`https://wa.me/${phoneNumber.replace('+', '')}?text=${encodeURIComponent(messageText)}`} target="_blank" className="block">
-                    <Button variant="outline" className="w-full h-14 rounded-2xl border-zinc-200 hover:bg-green-50 hover:text-green-600 hover:border-green-200 transition-all active:scale-95 italic uppercase text-[10px] font-black gap-2">
-                      <MessageCircle className="w-4 h-4" /> WhatsApp
+
+                  {/* Instagram - Hoverda PUSHTI rang */}
+                  <a href={`https://www.instagram.com/rustamovv.09`} target="_blank" className="block cursor-pointer group">
+                    <Button
+                      variant="outline"
+                      className="w-full h-14 rounded-2xl border-zinc-200 hover:!bg-[#E4405F] hover:!text-white hover:!border-[#E4405F] transition-all active:scale-95 italic uppercase text-[10px] font-black gap-2 cursor-pointer group"
+                    >
+                      <svg
+                        width="16"
+                        height="16"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        strokeWidth="2.5"
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        className="text-[#E4405F] group-hover:text-white transition-colors"
+                      >
+                        <rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect>
+                        <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path>
+                        <line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line>
+                      </svg>
+                      Instagram
                     </Button>
                   </a>
                 </div>
               </div>
             </div>
           </div>
-          
+
         </div>
       </div>
     </div>

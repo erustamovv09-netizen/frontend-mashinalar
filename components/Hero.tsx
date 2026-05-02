@@ -19,7 +19,7 @@ const slides = [
     subtitle: "E'LONLAR BO'LIMI",
     description: "O'z avtomobilingizni soting yoki yangisini qidiring.",
     image: "https://images.unsplash.com/photo-1492144534655-ae79c964c9d7?q=80&w=2083",
-    link: "/admin", 
+    link: "/admin",
     btnText: "E'lon berish +"
   },
   {
@@ -27,7 +27,7 @@ const slides = [
     title: "BIZ BILAN BOG'LANISH",
     subtitle: "24/7 QO'LLAB-QUVVATLASH",
     description: "Savollaringiz bormi? Mutaxassislarimiz yordamga tayyor.",
-    image: "https://images.unsplash.com/photo-1555353540-64580b51c258?q=80&w=2036&auto=format&fit=crop", 
+    image: "https://images.unsplash.com/photo-1555353540-64580b51c258?q=80&w=2036&auto=format&fit=crop",
     link: "#footer",
     btnText: "Bog'lanish"
   }
@@ -48,9 +48,8 @@ export default function Hero() {
       {slides.map((slide, index) => (
         <div
           key={slide.id}
-          className={`absolute inset-0 transition-opacity duration-1000 ${
-            index === current ? "opacity-100 z-10" : "opacity-0 z-0"
-          }`}
+          className={`absolute inset-0 transition-opacity duration-1000 ${index === current ? "opacity-100 z-10" : "opacity-0 z-0"
+            }`}
         >
 
           <div className="absolute inset-0">
@@ -70,7 +69,7 @@ export default function Hero() {
               <p className="text-zinc-600 text-sm md:text-lg font-medium max-w-md">{slide.description}</p>
 
               <div className="pt-4">
-                <a 
+                <a
                   href={slide.link}
                   className="inline-block bg-zinc-900 hover:bg-red-600 text-white font-black uppercase px-8 py-4 rounded-2xl transition-all duration-300 active:scale-95 text-xs tracking-widest shadow-xl"
                 >
@@ -81,14 +80,13 @@ export default function Hero() {
           </div>
         </div>
       ))}
-      
 
       <div className="absolute bottom-8 left-1/2 -translate-x-1/2 z-20 flex gap-2">
         {slides.map((_, i) => (
-          <button 
-            key={i} 
-            onClick={() => setCurrent(i)} 
-            className={`h-1.5 transition-all duration-500 rounded-full ${current === i ? "w-8 bg-red-600" : "w-2 bg-zinc-300"}`} 
+          <button
+            key={i}
+            onClick={() => setCurrent(i)}
+            className={`h-1.5 transition-all duration-500 rounded-full ${current === i ? "w-8 bg-red-600" : "w-2 bg-zinc-300"}`}
           />
         ))}
       </div>

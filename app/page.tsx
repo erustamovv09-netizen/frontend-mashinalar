@@ -22,6 +22,7 @@ export default async function Home() {
   return (
     <>
 
+
       <Hero />
       <div className="container mx-auto px-4 py-12">
         <Partners />

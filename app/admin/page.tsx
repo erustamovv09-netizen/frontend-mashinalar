@@ -12,24 +12,55 @@ export default function PostCarPage() {
     setLoading(true);
 
     const formElement = e.currentTarget;
-    const formData = new FormData(formElement); // Rasm yuklash uchun FormData shart!
+    const formData = new FormData(formElement);
+
+    // Telegram uchun ma'lumotlarni olamiz
+    const carName = formData.get("name");
+    const carPrice = formData.get("price");
+    const ownerPhone = formData.get("owner_phone");
 
     try {
+      // 1. DJANGO BAZASIGA YUBORISH (Fayl bilan birga)
       const res = await fetch("http://127.0.0.1:8000/mahsulot/", {
         method: "POST",
-        // DIQQAT: Multipart jo'natayotganda "Content-Type"ni o'zingiz yozmang! 
-        // Brauzer avtomat boundary bilan o'zi qo'shib oladi.
-        body: formData, 
+        body: formData, // FormData rasm faylini avtomatik o'zi bilan olib ketadi
       });
 
       if (res.ok) {
-        alert("E'lon muvaffaqiyatli qo'shildi!");
+        // 2. TELEGRAM BOTGA XABAR YUBORISH
+        const botToken = "8716193054:AAFoaX8zIEhjZaluaRaaPnIdXHOOfhivCjw";
+        const chatId = "8273165378"; 
+        
+        const telegramMessage = `
+🚀 **YANGI E'LON QO'SHILDI!**
+
+🚗 **Mashina:** ${carName}
+💰 **Narxi:** ${carPrice} $
+📞 **Tel:** ${ownerPhone}
+✅ E'lon muvaffaqiyatli saytga joylandi va rasm bazaga yuklandi.
+        `;
+
+        try {
+          await fetch(`https://api.telegram.org/bot${botToken}/sendMessage`, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+              chat_id: chatId,
+              text: telegramMessage,
+              parse_mode: "Markdown",
+            }),
+          });
+        } catch (tgErr) {
+          console.error("Telegramga yuborishda xatolik:", tgErr);
+        }
+
+        alert("E'lon muvaffaqiyatli qo'shildi va Telegramga xabar yuborildi!");
         router.push("/cars");
         router.refresh();
       } else {
         const errorData = await res.json();
         console.error("Backend xatosi:", errorData);
-        alert("Xatolik yuz berdi. Ma'lumotlarni tekshiring.");
+        alert("Xatolik yuz berdi. Barcha maydonlarni to'ldirganingizni tekshiring.");
       }
     } catch (error) {
       alert("Server bilan aloqa bog'lanmadi.");
@@ -40,96 +71,59 @@ export default function PostCarPage() {
 
   return (
     <main className="min-h-screen bg-[#F8F9FA] py-16 px-6">
-      <div className="max-w-3xl mx-auto">
+      <div className="max-w-4xl mx-auto">
         
-        {/* HEADER */}
         <div className="mb-10 text-center">
           <h1 className="text-4xl font-[900] italic uppercase tracking-tighter text-zinc-900">
-            Yangi <span className="text-red-600">E'lon</span>
+            Admin <span className="text-red-600">Panel</span>
           </h1>
-          <div className="h-1 w-20 bg-red-600 mx-auto mt-2 rounded-full"></div>
+          <p className="text-zinc-500 text-xs font-bold uppercase tracking-widest mt-2">Yangi avtomobil qo'shish</p>
         </div>
 
         <form onSubmit={handleSubmit} className="space-y-6">
-          
-          {/* KONTEYNER */}
           <div className="bg-white p-8 md:p-12 rounded-[40px] shadow-[0_20px_50px_rgba(0,0,0,0.05)] border border-zinc-100">
             
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              {/* INPUT ELEMENTLARI */}
-              <div className="flex flex-col gap-2">
-                <label className="text-[10px] font-black uppercase tracking-widest text-zinc-400 ml-2">Mashina nomi</label>
-                <input name="name" required placeholder="Tesla Model 3" className="form-input" />
-              </div>
-
-              <div className="flex flex-col gap-2">
-                <label className="text-[10px] font-black uppercase tracking-widest text-zinc-400 ml-2">Brend</label>
-                <input name="brand" required placeholder="Tesla" className="form-input" />
-              </div>
-
-              <div className="flex flex-col gap-2">
-                <label className="text-[10px] font-black uppercase tracking-widest text-zinc-400 ml-2">Narxi ($)</label>
-                <input name="price" type="number" required placeholder="45000" className="form-input" />
-              </div>
-
-              <div className="flex flex-col gap-2">
-                <label className="text-[10px] font-black uppercase tracking-widest text-zinc-400 ml-2">Ishlab chiqarilgan yili</label>
-                <input name="year" type="number" required placeholder="2024" className="form-input" />
-              </div>
-
-              <div className="flex flex-col gap-2">
-                <label className="text-[10px] font-black uppercase tracking-widest text-zinc-400 ml-2">Rangi</label>
-                <input name="color" required placeholder="Qora" className="form-input" />
-              </div>
-
-              <div className="flex flex-col gap-2">
-                <label className="text-[10px] font-black uppercase tracking-widest text-zinc-400 ml-2">Yoqilg'i turi</label>
-                <input name="fuel_type" required placeholder="Elektr / Benzin" className="form-input" />
-              </div>
-
-              <div className="flex flex-col gap-2">
-                <label className="text-[10px] font-black uppercase tracking-widest text-zinc-400 ml-2">Uzatmalar qutisi</label>
-                <input name="transmission" required placeholder="Avtomat" className="form-input" />
-              </div>
-
-              <div className="flex flex-col gap-2">
-                <label className="text-[10px] font-black uppercase tracking-widest text-zinc-400 ml-2">Dvigatel hajmi</label>
-                <input name="engine_volume" required placeholder="1.5 L / 0 (Elektr)" className="form-input" />
-              </div>
+            <h3 className="text-sm font-black uppercase tracking-widest text-red-600 mb-6 border-b pb-2">Texnik Ma'lumotlar</h3>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-10">
+              <input name="name" required placeholder="Mashina nomi" className="form-input" />
+              <input name="brand" required placeholder="Brend" className="form-input" />
+              <input name="price" type="number" required placeholder="Narxi ($)" className="form-input" />
+              <input name="year" type="number" required placeholder="Yili" className="form-input" />
+              <input name="color" required placeholder="Rangi" className="form-input" />
+              <input name="fuel_type" required placeholder="Yoqilg'i turi" className="form-input" />
+              <input name="transmission" required placeholder="Uzatmalar qutisi" className="form-input" />
+              <input name="engine_volume" required placeholder="Dvigatel hajmi" className="form-input" />
             </div>
 
-            {/* TAVSIF */}
-            <div className="flex flex-col gap-2 mt-6">
-              <label className="text-[10px] font-black uppercase tracking-widest text-zinc-400 ml-2">Batafsil ma'lumot</label>
-              <textarea 
-                name="description" 
-                rows={4} 
-                className="form-input min-h-[120px] py-4 resize-none"
-                placeholder="Mashina holati haqida qisqacha..."
-              />
+            <h3 className="text-sm font-black uppercase tracking-widest text-red-600 mb-6 border-b pb-2">Sotuvchi Kontaktlari</h3>
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-10">
+              <input name="owner_phone" required defaultValue="+998901234567" className="form-input" />
+              <input name="telegram_user" defaultValue="Rustamovv_E" className="form-input" />
+              <input name="instagram_user" defaultValue="rustamovv.09" className="form-input" />
             </div>
 
-            {/* FILE UPLOAD (Premium Style) */}
-            <div className="mt-8">
-              <label className="text-[10px] font-black uppercase tracking-widest text-zinc-400 ml-2 block mb-2">Mashina rasmini tanlang</label>
-              <div className="relative group">
+            <div className="space-y-6">
+              <textarea name="description" rows={4} className="form-input min-h-[100px] py-4 resize-none" placeholder="Mashina holati haqida batafsil..." />
+
+              {/* GALEREYADAN RASM TANLASH QISMI */}
+              <div className="p-8 border-2 border-dashed border-zinc-200 rounded-3xl bg-zinc-50 flex flex-col items-center gap-4">
+                <label className="text-[10px] font-black uppercase tracking-widest text-zinc-400">Mashina rasmini tanlang</label>
                 <input 
                   name="image" 
                   type="file" 
                   accept="image/*" 
                   required 
-                  className="w-full h-14 bg-zinc-50 border-2 border-dashed border-zinc-200 rounded-2xl flex items-center px-4 text-sm file:mr-4 file:py-1 file:px-4 file:rounded-full file:border-0 file:text-[10px] file:font-black file:bg-zinc-900 file:text-white hover:border-red-500 transition-all cursor-pointer"
+                  className="text-xs file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-[10px] file:font-black file:bg-zinc-900 file:text-white hover:file:bg-red-600 transition-all cursor-pointer" 
                 />
               </div>
             </div>
 
-            {/* TUGMA */}
             <button 
               type="submit" 
-              disabled={loading}
+              disabled={loading} 
               className="w-full h-16 bg-zinc-900 hover:bg-red-600 text-white font-[900] uppercase tracking-[0.2em] rounded-[24px] shadow-xl transition-all active:scale-[0.98] mt-10 disabled:opacity-50 text-xs"
             >
-              {loading ? "YUBORILMOQDA..." : "E'LONNI JOYLASHTIRISH"}
+              {loading ? "YUBORILMOQDA..." : "E'LONNI TASDIQLASH"}
             </button>
           </div>
         </form>
@@ -138,20 +132,19 @@ export default function PostCarPage() {
       <style jsx>{`
         .form-input {
           width: 100%;
-          height: 3rem;
+          height: 3.5rem;
           background-color: #F9FAFB;
           border: 1px solid #E5E7EB;
-          border-radius: 1rem;
-          padding: 0 1rem;
+          border-radius: 1.25rem;
+          padding: 0 1.25rem;
           outline: none;
           transition: all 0.3s;
           font-size: 0.875rem;
-          font-weight: 500;
+          font-weight: 600;
         }
         .form-input:focus {
           background-color: white;
           border-color: #EF4444;
-          box-shadow: 0 0 0 4px rgba(239, 68, 68, 0.1);
         }
       `}</style>
     </main>

@@ -23,10 +23,10 @@ export default async function CardImage() {
                     <Card key={item.id} className="overflow-hidden border-none shadow-lg hover:shadow-2xl transition-all duration-300">
                         <Link href={`/cars/${item.id}`}>
                             <div className="relative aspect-[16/10] overflow-hidden">
-                                <img 
-                                    src={item.image} 
-                                    alt={item.name} 
-                                    className="w-full h-full object-cover hover:scale-105 transition-transform duration-500" 
+                                <img
+                                    src={item.image}
+                                    alt={item.name}
+                                    className="w-full h-full object-cover hover:scale-105 transition-transform duration-500"
                                 />
                                 <Badge className="absolute top-4 right-4 bg-white/90 text-black hover:bg-white">
                                     {item.year}

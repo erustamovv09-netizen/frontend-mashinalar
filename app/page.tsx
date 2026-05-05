@@ -25,11 +25,12 @@ export default async function Home() {
       <div className="container mx-auto px-4 py-12">
         <Partners />
         {/* Bo'lim sarlavhasi */}
-        <div className="text-center mb-12">
-          <h2 className="text-3xl md:text-4xl font-black uppercase italic mb-4">
+        {/* Bo'lim sarlavhasi */}
+        <div className="text-center mb-8 md:mb-12">
+          <h2 className="text-2xl md:text-3xl lg:text-4xl font-black uppercase italic mb-2 md:mb-4">
             OMMABOP <span className="text-red-600">AVTOMOBILLAR</span>
           </h2>
-          <p className="text-zinc-500 max-w-2xl mx-auto">
+          <p className="text-zinc-500 max-w-2xl mx-auto text-sm md:text-base px-4">
             Eng sifatli va ishonchli avtomobillar sizni kutmoqda
           </p>
         </div>

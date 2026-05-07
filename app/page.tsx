@@ -18,13 +18,15 @@ async function getData() {
 export default async function Home() {
   const data = await getData();
 
+  // MO'JIZA SHU YERDA: Eng oxirgi qo'shilgan (yangi) 6 ta mashinani qirqib olamiz
+  const latestCars = data.slice().reverse().slice(0, 6);
+
   return (
     <>
-
       <Hero />
       <div className="container mx-auto px-4 py-12">
         <Partners />
-        {/* Bo'lim sarlavhasi */}
+        
         {/* Bo'lim sarlavhasi */}
         <div className="text-center mb-8 md:mb-12">
           <h2 className="text-2xl md:text-3xl lg:text-4xl font-black uppercase italic mb-2 md:mb-4">
@@ -37,7 +39,7 @@ export default async function Home() {
 
         {/* Mashinalar grid */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-          {data.map((item: any) => (
+          {latestCars.map((item: any) => (
             <Card key={item.id} className="overflow-hidden border-none shadow-lg hover:shadow-2xl transition-all group">
               <Link href={`/cars/${item.id}`}>
                 <div className="relative aspect-[16/10] overflow-hidden bg-gray-100">
@@ -73,8 +75,20 @@ export default async function Home() {
             </Card>
           ))}
         </div>
-      </div>
 
+        {/* BARCHASINI KO'RISH TUGMASI (Saytga pro-ko'rinish beradi) */}
+        {data.length > 6 && (
+          <div className="mt-12 text-center">
+            <Link 
+              href="/cars" 
+              className="inline-flex items-center justify-center border-2 border-zinc-900 text-zinc-900 hover:bg-zinc-900 hover:text-white px-8 py-3.5 rounded-full font-black uppercase tracking-widest text-xs md:text-sm transition-all active:scale-95"
+            >
+              Barcha {data.length} ta e'lonni ko'rish
+            </Link>
+          </div>
+        )}
+
+      </div>
     </>
   );
 }

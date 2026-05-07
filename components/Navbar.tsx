@@ -1,13 +1,33 @@
 "use client";
 
-import { useState } from "react";
-import { useRouter } from "next/navigation";
+import { useState, useEffect } from "react";
+import { useRouter, useSearchParams } from "next/navigation"; // useSearchParams qo'shildi
 import Link from "next/link";
 
 export default function Navbar() {
+  const router = useRouter();
+  const searchParams = useSearchParams(); // URL ni o'qish uchun
   const [searchQuery, setSearchQuery] = useState("");
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
-  const router = useRouter();
+
+  // MANA SHU YERDA MO'JIZA YUZ BERADI: URL O'ZGARSA, INPUT HAM O'ZGARADI
+  useEffect(() => {
+    // Agar sahifa URL'ida "search" bo'lmasa, inputni tozalaymiz
+    setSearchQuery(searchParams.get("search") || "");
+  }, [searchParams]);
+
+  // YOZILAYOTGANDA (ENTER BOSILMASA HAM ISHLAYDI)
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const term = e.target.value;
+    setSearchQuery(term);
+    
+    // Foydalanuvchi yozishni boshlaganda darhol filtrlash
+    if (term.trim()) {
+      router.push(`/cars?search=${encodeURIComponent(term.trim())}`);
+    } else {
+      router.push("/cars"); // Bo'sh bo'lsa hamma mashinalarni ko'rsatadi
+    }
+  };
 
   const handleSearch = (e: React.FormEvent) => {
     e.preventDefault();
@@ -23,7 +43,7 @@ export default function Navbar() {
 
   return (
     <nav className="bg-white/80 backdrop-blur-md sticky top-0 z-50 border-b border-zinc-200 shadow-sm transition-all">
-      {/* 1-QATOR: LOGO VA BURGER (Hamma ekranda ko'rinadi) */}
+      {/* 1-QATOR: LOGO VA BURGER */}
       <div className="container mx-auto px-4 md:px-6 h-16 md:h-20 flex items-center justify-between gap-4">
 
         {/* LOGO */}
@@ -39,21 +59,21 @@ export default function Navbar() {
           </span>
         </Link>
 
-        {/* DESKTOP QIDIRUV (Faqat kompyuterda ko'rinadi) */}
+        {/* DESKTOP QIDIRUV */}
         <form onSubmit={handleSearch} className="hidden md:flex flex-1 max-w-md mx-6 relative">
           <div className="relative flex items-center w-full">
             <span className="absolute left-4 text-zinc-400 z-10">🔍</span>
             <input
               type="text"
               value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
+              onChange={handleInputChange} 
               placeholder="Qidiruv..."
               className="w-full h-11 bg-zinc-100 border border-transparent rounded-full pl-12 pr-4 outline-none transition-all text-sm font-bold italic focus:bg-white focus:border-red-500 focus:ring-4 focus:ring-red-500/10"
             />
           </div>
         </form>
 
-        {/* DESKTOP MENYU (Faqat kompyuterda ko'rinadi) */}
+        {/* DESKTOP MENYU */}
         <div className="hidden md:flex items-center gap-8 shrink-0">
           <Link href="/" className="text-[11px] font-black uppercase tracking-widest hover:text-red-600 transition-colors">Bosh sahifa</Link>
           <Link href="/cars" className="text-[11px] font-black uppercase tracking-widest hover:text-red-600 transition-colors">Mashinalar</Link>
@@ -64,7 +84,7 @@ export default function Navbar() {
           </Link>
         </div>
 
-        {/* BURGER TUGMA (Faqat telefonda ko'rinadi) */}
+        {/* BURGER TUGMA */}
         <button
           className="md:hidden p-2 text-zinc-900 focus:outline-none bg-zinc-50 rounded-lg active:bg-zinc-100 transition-colors"
           onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
@@ -77,21 +97,21 @@ export default function Navbar() {
         </button>
       </div>
 
-      {/* 2-QATOR: MOBIL QIDIRUV (Telefonda doim ko'rinib turadi) */}
+      {/* 2-QATOR: MOBIL QIDIRUV */}
       <div className="md:hidden px-4 pb-3">
         <form onSubmit={handleSearch} className="relative flex items-center w-full">
           <span className="absolute left-4 text-zinc-400 z-10 text-sm">🔍</span>
           <input
             type="text"
             value={searchQuery}
-            onChange={(e) => setSearchQuery(e.target.value)}
+            onChange={handleInputChange} 
             placeholder="Mashina qidiring..."
             className="w-full h-10 bg-zinc-100 border border-transparent rounded-xl pl-10 pr-4 outline-none transition-all text-xs font-bold italic focus:bg-white focus:border-red-500 focus:ring-2 focus:ring-red-500/20"
           />
         </form>
       </div>
 
-      {/* MOBIL MENYU (Faqat tugma bosilganda ochiladi, juda ixcham va nafis) */}
+      {/* MOBIL MENYU */}
       {isMobileMenuOpen && (
         <div className="md:hidden absolute top-full left-0 w-full bg-white border-b border-zinc-100 shadow-xl px-4 py-4 flex flex-col gap-2 animate-in slide-in-from-top-2 fade-in">
           <Link href="/" onClick={() => setIsMobileMenuOpen(false)} className="text-xs font-black uppercase tracking-widest p-3 bg-zinc-50 rounded-lg hover:bg-zinc-100 transition-colors">

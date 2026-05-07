@@ -95,9 +95,9 @@ export default async function CarDetailPage({ params }: { params: any }) {
 
           {/* O'NG TOMON: NARX VA PARAMETRLAR (STICKY) */}
           <div className="lg:col-span-4 lg:sticky lg:top-28 transition-all">
-            <div className="bg-white rounded-[32px] p-8 border border-zinc-100 shadow-xl shadow-zinc-200/50">
+            <div className="bg-white rounded-[32px] p-6 md:p-8 border border-zinc-100 shadow-xl shadow-zinc-200/50">
               <div className="mb-6">
-                <h1 className="text-4xl font-black text-zinc-900 tracking-tighter leading-none uppercase italic mb-2">
+                <h1 className="text-3xl md:text-4xl font-black text-zinc-900 tracking-tighter leading-none uppercase italic mb-2">
                   {car.name}
                 </h1>
                 <div className="flex items-center gap-2 text-zinc-400 text-xs font-bold">
@@ -106,64 +106,63 @@ export default async function CarDetailPage({ params }: { params: any }) {
               </div>
 
               <div className="flex items-baseline gap-2 mb-8">
-                <span className="text-5xl font-black text-zinc-900 italic tracking-tighter">
+                {/* Narx telefonda text-4xl, kompyuterda text-5xl */}
+                <span className="text-4xl md:text-5xl font-black text-zinc-900 italic tracking-tighter">
                   {Number(car.price).toLocaleString()}
                 </span>
-                <span className="text-4xl font-bold text-red-600">$</span>
+                <span className="text-3xl md:text-4xl font-bold text-red-600">$</span>
               </div>
 
-              <div className="grid grid-cols-2 gap-3 mb-8">
-                <div className="p-4 rounded-2xl bg-zinc-50 border border-zinc-100">
-                  <div className="flex items-center gap-2 text-[10px] font-bold text-zinc-400 uppercase mb-1">
+              <div className="grid grid-cols-2 gap-2 md:gap-3 mb-8">
+                <div className="p-3 md:p-4 rounded-2xl bg-zinc-50 border border-zinc-100">
+                  <div className="flex items-center gap-2 text-[9px] md:text-[10px] font-bold text-zinc-400 uppercase mb-1">
                     <Settings className="w-3 h-3" /> Transmissiya
                   </div>
-                  <p className="font-black text-zinc-900 text-sm italic">{car.transmission || "Avtomat"}</p>
+                  <p className="font-black text-zinc-900 text-xs md:text-sm italic">{car.transmission || "Avtomat"}</p>
                 </div>
-                <div className="p-4 rounded-2xl bg-zinc-50 border border-zinc-100">
-                  <div className="flex items-center gap-2 text-[10px] font-bold text-zinc-400 uppercase mb-1">
+                <div className="p-3 md:p-4 rounded-2xl bg-zinc-50 border border-zinc-100">
+                  <div className="flex items-center gap-2 text-[9px] md:text-[10px] font-bold text-zinc-400 uppercase mb-1">
                     <Fuel className="w-3 h-3" /> Yoqilg'i
                   </div>
-                  <p className="font-black text-zinc-900 text-sm italic">{car.fuel_type || "Elektr"}</p>
+                  <p className="font-black text-zinc-900 text-xs md:text-sm italic">{car.fuel_type || "Elektr"}</p>
                 </div>
-                <div className="p-4 rounded-2xl bg-zinc-50 border border-zinc-100">
-                  <div className="flex items-center gap-2 text-[10px] font-bold text-zinc-400 uppercase mb-1">
+                <div className="p-3 md:p-4 rounded-2xl bg-zinc-50 border border-zinc-100">
+                  <div className="flex items-center gap-2 text-[9px] md:text-[10px] font-bold text-zinc-400 uppercase mb-1">
                     <Gauge className="w-3 h-3" /> Dvigatel
                   </div>
-                  <p className="font-black text-zinc-900 text-sm italic">{car.engine_volume || "0.0 L"}</p>
+                  <p className="font-black text-zinc-900 text-xs md:text-sm italic">{car.engine_volume || "0.0 L"}</p>
                 </div>
-                <div className="p-4 rounded-2xl bg-zinc-50 border border-zinc-100">
-                  <div className="flex items-center gap-2 text-[10px] font-bold text-zinc-400 uppercase mb-1">
+                <div className="p-3 md:p-4 rounded-2xl bg-zinc-50 border border-zinc-100">
+                  <div className="flex items-center gap-2 text-[9px] md:text-[10px] font-bold text-zinc-400 uppercase mb-1">
                     <Palette className="w-3 h-3" /> Rangi
                   </div>
-                  <p className="font-black text-zinc-900 text-sm italic">{car.color || "Oq"}</p>
+                  <p className="font-black text-zinc-900 text-xs md:text-sm italic">{car.color || "Oq"}</p>
                 </div>
               </div>
 
               {/* BOG'LANISH TUGMALARI */}
               <div className="space-y-3">
                 <a href={`tel:${phoneNumber}`} className="block cursor-pointer">
-                  <Button className="w-full h-16 text-xs font-black uppercase rounded-2xl bg-zinc-900 hover:!bg-black text-white transition-all shadow-xl active:scale-95 italic tracking-widest gap-3 cursor-pointer">
+                  <Button className="w-full h-14 md:h-16 text-[11px] md:text-xs font-black uppercase rounded-2xl bg-zinc-900 hover:!bg-black text-white transition-all shadow-xl active:scale-95 italic tracking-widest gap-3 cursor-pointer">
                     <Phone className="w-4 h-4 fill-white" /> Telefon orqali bog'lanish
                   </Button>
                 </a>
 
-                <div className="grid grid-cols-2 gap-3">
-                  {/* Telegram - Hoverda KO'K rang */}
+                <div className="grid grid-cols-2 gap-2 md:gap-3">
                   <a href={`https://t.me/Rustamovv_E`} target="_blank" className="block cursor-pointer group">
                     <Button
                       variant="outline"
-                      className="w-full h-14 rounded-2xl border-zinc-200 hover:!bg-[#0088cc] hover:!text-white hover:!border-[#0088cc] transition-all active:scale-95 italic uppercase text-[10px] font-black gap-2 cursor-pointer group"
+                      className="w-full h-12 md:h-14 rounded-2xl border-zinc-200 hover:!bg-[#0088cc] hover:!text-white hover:!border-[#0088cc] transition-all active:scale-95 italic uppercase text-[9px] md:text-[10px] font-black gap-2 cursor-pointer group"
                     >
                       <Send className="w-4 h-4 text-[#0088cc] group-hover:text-white transition-colors" />
                       Telegram
                     </Button>
                   </a>
 
-                  {/* Instagram - Hoverda PUSHTI rang */}
                   <a href={`https://www.instagram.com/rustamovv.09`} target="_blank" className="block cursor-pointer group">
                     <Button
                       variant="outline"
-                      className="w-full h-14 rounded-2xl border-zinc-200 hover:!bg-[#E4405F] hover:!text-white hover:!border-[#E4405F] transition-all active:scale-95 italic uppercase text-[10px] font-black gap-2 cursor-pointer group"
+                      className="w-full h-12 md:h-14 rounded-2xl border-zinc-200 hover:!bg-[#E4405F] hover:!text-white hover:!border-[#E4405F] transition-all active:scale-95 italic uppercase text-[9px] md:text-[10px] font-black gap-2 cursor-pointer group"
                     >
                       <svg
                         width="16"

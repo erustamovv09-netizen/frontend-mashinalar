@@ -1,31 +1,30 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { useRouter, useSearchParams } from "next/navigation"; // useSearchParams qo'shildi
+import { useRouter, useSearchParams } from "next/navigation"; 
 import Link from "next/link";
 
 export default function Navbar() {
   const router = useRouter();
-  const searchParams = useSearchParams(); // URL ni o'qish uchun
+  const searchParams = useSearchParams(); 
   const [searchQuery, setSearchQuery] = useState("");
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
-  // MANA SHU YERDA MO'JIZA YUZ BERADI: URL O'ZGARSA, INPUT HAM O'ZGARADI
   useEffect(() => {
-    // Agar sahifa URL'ida "search" bo'lmasa, inputni tozalaymiz
     setSearchQuery(searchParams.get("search") || "");
   }, [searchParams]);
 
-  // YOZILAYOTGANDA (ENTER BOSILMASA HAM ISHLAYDI)
+  // YOZILAYOTGANDA HAM ISHLAYDI
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const term = e.target.value;
     setSearchQuery(term);
     
-    // Foydalanuvchi yozishni boshlaganda darhol filtrlash
     if (term.trim()) {
+      // Yozuv bor bo'lsa, /cars ga borib qidiradi
       router.push(`/cars?search=${encodeURIComponent(term.trim())}`);
     } else {
-      router.push("/cars"); // Bo'sh bo'lsa hamma mashinalarni ko'rsatadi
+      // YOZUV O'CHIRILSA, BOSH SAHIFAGA QAYTADI
+      router.push("/"); 
     }
   };
 
@@ -36,7 +35,8 @@ export default function Navbar() {
       router.push(`/cars?search=${encodeURIComponent(term)}`);
       setIsMobileMenuOpen(false);
     } else {
-      router.push("/cars");
+      // ENTER BOSILGANDA HAM YOZUV YO'Q BO'LSA BOSH SAHIFAGA QAYTADI
+      router.push("/");
       setIsMobileMenuOpen(false);
     }
   };

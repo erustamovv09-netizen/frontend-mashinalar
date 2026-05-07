@@ -83,7 +83,7 @@ export default async function Home() {
               href="/cars" 
               className="inline-flex items-center justify-center border-2 border-zinc-900 text-zinc-900 hover:bg-zinc-900 hover:text-white px-8 py-3.5 rounded-full font-black uppercase tracking-widest text-xs md:text-sm transition-all active:scale-95"
             >
-              Barcha {data.length} ta e'lonni ko'rish
+              Barcha e'lonlarni ko'rish
             </Link>
           </div>
         )}

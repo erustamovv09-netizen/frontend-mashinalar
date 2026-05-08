@@ -14,6 +14,8 @@ import {
   MapPin
 } from "lucide-react";
 import Link from "next/link";
+// YANGI TUGMA IMPORT QILINDI
+import ClientEditButton from "@/components/ClientEditButton"; 
 
 async function getSingleCar(id: string) {
   try {
@@ -62,7 +64,6 @@ export default async function CarDetailPage({ params }: { params: any }) {
           <span className="text-zinc-900">{car.name}</span>
         </div>
 
-        {/* items-start klassi o'ng tomonni to'g'ri tushishi uchun muhim */}
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
 
           {/* CHAP TOMON: RASM */}
@@ -106,7 +107,6 @@ export default async function CarDetailPage({ params }: { params: any }) {
               </div>
 
               <div className="flex items-baseline gap-2 mb-8">
-                {/* Narx telefonda text-4xl, kompyuterda text-5xl */}
                 <span className="text-4xl md:text-5xl font-black text-zinc-900 italic tracking-tighter">
                   {Number(car.price).toLocaleString()}
                 </span>
@@ -149,7 +149,7 @@ export default async function CarDetailPage({ params }: { params: any }) {
                 </a>
 
                 <div className="grid grid-cols-2 gap-2 md:gap-3">
-                  <a href={`https://t.me/Rustamovv_E`} target="_blank" className="block cursor-pointer group">
+                  <a href={`https://t.me/${car.telegram_user || "Rustamovv_E"}`} target="_blank" className="block cursor-pointer group">
                     <Button
                       variant="outline"
                       className="w-full h-12 md:h-14 rounded-2xl border-zinc-200 hover:!bg-[#0088cc] hover:!text-white hover:!border-[#0088cc] transition-all active:scale-95 italic uppercase text-[9px] md:text-[10px] font-black gap-2 cursor-pointer group"
@@ -159,7 +159,7 @@ export default async function CarDetailPage({ params }: { params: any }) {
                     </Button>
                   </a>
 
-                  <a href={`https://www.instagram.com/rustamovv.09`} target="_blank" className="block cursor-pointer group">
+                  <a href={`https://www.instagram.com/${car.instagram_user || "rustamovv.09"}`} target="_blank" className="block cursor-pointer group">
                     <Button
                       variant="outline"
                       className="w-full h-12 md:h-14 rounded-2xl border-zinc-200 hover:!bg-[#E4405F] hover:!text-white hover:!border-[#E4405F] transition-all active:scale-95 italic uppercase text-[9px] md:text-[10px] font-black gap-2 cursor-pointer group"
@@ -183,6 +183,10 @@ export default async function CarDetailPage({ params }: { params: any }) {
                     </Button>
                   </a>
                 </div>
+                
+                {/* 15-DAQIQALIK TAHRIRLASH TUGMASI MANA SHU YERDA */}
+                <ClientEditButton carId={car.id} />
+
               </div>
             </div>
           </div>

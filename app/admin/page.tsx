@@ -2,13 +2,13 @@
 
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
-import { Trash2, Search } from "lucide-react"; // Search ikonkasini ham qo'shdik
+import { Trash2, Search, Pencil } from "lucide-react"; // Pencil ikonkasini qo'shdik
 
 export default function PostCarPage() {
   const router = useRouter();
   const [loading, setLoading] = useState(false);
   const [cars, setCars] = useState<any[]>([]); 
-  const [searchQuery, setSearchQuery] = useState(""); // Qidiruv uchun yangi state
+  const [searchQuery, setSearchQuery] = useState(""); 
 
   const fetchCars = async () => {
     try {
@@ -54,6 +54,10 @@ export default function PostCarPage() {
     const formElement = e.currentTarget;
     const formData = new FormData(formElement);
 
+    // 1. MAXFIY KALIT YARATAMIZ VA FORMAGA QO'SHAMIZ
+    const secretKey = Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15);
+    formData.append("secret_key", secretKey);
+
     const carName = formData.get("name");
     const carPrice = formData.get("price");
     const ownerPhone = formData.get("owner_phone");
@@ -65,6 +69,16 @@ export default function PostCarPage() {
       });
 
       if (res.ok) {
+        const createdCar = await res.json(); // YANGI MASHINA MA'LUMOTINI OLAMIZ
+
+        // 2. LOKAL XOTIRAGA (MIJOZ BRAUZERIGA) SAQLAB QO'YAMIZ
+        const myCars = JSON.parse(localStorage.getItem('my_cars') || '{}');
+        myCars[createdCar.id] = {
+          secret_key: secretKey,
+          created_at: new Date().getTime() // Hozirgi vaqt
+        };
+        localStorage.setItem('my_cars', JSON.stringify(myCars));
+
         try {
           await fetch("/api/telegram", {
             method: "POST",
@@ -92,7 +106,6 @@ export default function PostCarPage() {
 
   const inputClassName = "w-full h-12 md:h-14 bg-zinc-50 border border-zinc-200 rounded-2xl px-5 outline-none transition-all text-xs md:text-sm font-bold focus:bg-white focus:border-red-500 focus:ring-4 focus:ring-red-500/10 placeholder:text-zinc-400";
 
-  // QIDIRUV MANTIQ: Faqat qidiruvga mos keladigan mashinalarni ajratib olamiz
   const filteredCars = cars.filter(car => 
     car.name.toLowerCase().includes(searchQuery.toLowerCase())
   );
@@ -183,7 +196,6 @@ export default function PostCarPage() {
             </span>
           </div>
 
-          {/* QIDIRUV MAYDONI (SEARCH) - Lupa mukammal joylashdi */}
           <div className="mb-6 relative flex items-center w-full">
             <Search className="absolute left-4 text-zinc-400 w-5 h-5 z-10" />
             <input
@@ -196,7 +208,6 @@ export default function PostCarPage() {
           </div>
 
           <div className="space-y-3 md:space-y-4">
-            {/* Endi 'cars' o'rniga 'filteredCars' ni aylantiramiz */}
             {filteredCars.map((car) => (
               <div key={car.id} className="flex flex-col md:flex-row items-center justify-between p-3 md:p-4 bg-zinc-50 border border-zinc-100 rounded-2xl md:rounded-[20px] gap-4 transition-all hover:border-zinc-300">
                 
@@ -214,12 +225,22 @@ export default function PostCarPage() {
                   </div>
                 </div>
 
-                <button 
-                  onClick={() => handleDelete(car.id)}
-                  className="w-full md:w-auto h-11 px-6 bg-red-50 hover:bg-red-600 hover:text-white text-red-600 border border-red-100 rounded-xl transition-all font-black uppercase text-[10px] tracking-widest flex items-center justify-center gap-2"
-                >
-                  <Trash2 className="w-4 h-4" /> O'chirish
-                </button>
+                {/* TAHRIRLASH VA O'CHIRISH TUGMALARI */}
+                <div className="flex items-center gap-2 w-full md:w-auto">
+                  <button 
+                    onClick={() => router.push(`/cars/${car.id}/edit`)}
+                    className="flex-1 md:w-auto h-11 px-4 bg-blue-50 hover:bg-blue-600 hover:text-white text-blue-600 border border-blue-100 rounded-xl transition-all font-black uppercase text-[10px] tracking-widest flex items-center justify-center gap-2"
+                  >
+                    <Pencil className="w-4 h-4" /> Tahrirlash
+                  </button>
+
+                  <button 
+                    onClick={() => handleDelete(car.id)}
+                    className="flex-1 md:w-auto h-11 px-4 bg-red-50 hover:bg-red-600 hover:text-white text-red-600 border border-red-100 rounded-xl transition-all font-black uppercase text-[10px] tracking-widest flex items-center justify-center gap-2"
+                  >
+                    <Trash2 className="w-4 h-4" /> O'chirish
+                  </button>
+                </div>
               </div>
             ))}
 

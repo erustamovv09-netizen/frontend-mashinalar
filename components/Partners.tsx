@@ -39,9 +39,16 @@ const partners = [
 export default function Partners() {
   // Qaytariluvchi qismni alohida render funksiyasiga oldik
   const renderPartners = (isClone = false) => (
+    // SIZNING ORIGINAL KODINGIZ (gap o'z joyida qoldi)
     <div className="flex items-center gap-8 sm:gap-12 md:gap-16" aria-hidden={isClone}>
       {partners.map((partner, index) => (
-        <div key={isClone ? `clone-${index}` : index} className="flex items-center justify-center h-[72px]">
+        <div 
+          key={isClone ? `clone-${index}` : index} 
+          // YAGONA O'ZGARISH: Eng oxirgi so'z bo'lsa (SPACEX) o'ng tomondan masofa (margin) beramiz
+          className={`flex items-center justify-center h-[72px] shrink-0 ${
+            index === partners.length - 1 ? 'mr-8 sm:mr-12 md:mr-16' : ''
+          }`}
+        >
           <a 
             href={partner.url}
             target="_blank"
@@ -79,7 +86,7 @@ export default function Partners() {
         </div>
       </div>
 
-      {/* Custom animatsiya */}
+      {/* SIZNING ORIGINAL ANIMATSIYANGIZ */}
       <style jsx global>{`
         @keyframes infinite-scroll {
           0% {

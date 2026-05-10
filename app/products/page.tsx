@@ -2,7 +2,6 @@ export default async function Home() {
     const res = await fetch("http://127.0.0.1:8000/mashinalar");
     const data = await res.json();
 
-
     return(
         <div>
             {data.map((item: any) => (

@@ -6,6 +6,16 @@ const nextConfig: NextConfig = {
     remotePatterns: [
       {
         protocol: 'https',
+        hostname: 'res.cloudinary.com', // <--- CLOUDINARY UCHUN RUXSAT
+        pathname: '/**',
+      },
+      {
+        protocol: 'https',
+        hostname: 'avtobozor.onrender.com', // Eski Render rasmlari uchun (ehtiyot shart)
+        pathname: '/**',
+      },
+      {
+        protocol: 'https',
         hostname: 'carexkorea.ru',
         pathname: '/**',
       },
@@ -22,12 +32,6 @@ const nextConfig: NextConfig = {
       {
         protocol: 'https',
         hostname: 'images.unsplash.com',
-        pathname: '/**',
-      },
-      {
-        protocol: 'http',
-        hostname: '127.0.0.1',
-        port: '8000',
         pathname: '/**',
       },
     ],

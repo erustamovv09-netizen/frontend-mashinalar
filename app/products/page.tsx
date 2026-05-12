@@ -1,9 +1,9 @@
 export default async function Home() {
-    const res = await fetch("http://127.0.0.1:8000/mashinalar");
+    const res = await fetch("https://avtobozor.onrender.com/mashinalar");
     const data = await res.json();
 
 
-    return(
+    return (
         <div>
             {data.map((item: any) => (
                 <div key={item.id}>

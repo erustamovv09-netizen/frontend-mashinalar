@@ -7,7 +7,7 @@ import Partners from "@/components/Partners";
 import Hero from "@/components/Hero";
 
 async function getData() {
-  const res = await fetch("http://127.0.0.1:8000/mahsulot/", {
+  const res = await fetch("https://avtobozor.onrender.com/mahsulot/", {
     cache: 'no-store',
     next: { revalidate: 0 }
   });
@@ -26,7 +26,7 @@ export default async function Home() {
       <Hero />
       <div className="container mx-auto px-4 py-12">
         <Partners />
-        
+
         {/* Bo'lim sarlavhasi */}
         <div className="text-center mb-8 md:mb-12">
           <h2 className="text-2xl md:text-3xl lg:text-4xl font-black uppercase italic mb-2 md:mb-4">
@@ -44,7 +44,7 @@ export default async function Home() {
               <Link href={`/cars/${item.id}`}>
                 <div className="relative aspect-[16/10] overflow-hidden bg-gray-100">
                   <img
-                    src={item.image ? (item.image.startsWith('http') ? item.image : `http://127.0.0.1:8000${item.image}`) : '/placeholder.jpg'}
+                    src={item.image ? (item.image.startsWith('http') ? item.image : `https://avtobozor.onrender.com${item.image}`) : '/placeholder.jpg'}
                     alt={item.name}
                     className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
                   />
@@ -79,8 +79,8 @@ export default async function Home() {
         {/* BARCHASINI KO'RISH TUGMASI (Saytga pro-ko'rinish beradi) */}
         {data.length > 6 && (
           <div className="mt-12 text-center">
-            <Link 
-              href="/cars" 
+            <Link
+              href="/cars"
               className="inline-flex items-center justify-center border-2 border-zinc-900 text-zinc-900 hover:bg-zinc-900 hover:text-white px-8 py-3.5 rounded-full font-black uppercase tracking-widest text-xs md:text-sm transition-all active:scale-95"
             >
               Barcha e'lonlarni ko'rish

@@ -15,11 +15,11 @@ import {
 } from "lucide-react";
 import Link from "next/link";
 // YANGI TUGMA IMPORT QILINDI
-import ClientEditButton from "@/components/ClientEditButton"; 
+import ClientEditButton from "@/components/ClientEditButton";
 
 async function getSingleCar(id: string) {
   try {
-    const res = await fetch(`http://127.0.0.1:8000/mahsulot/${id}/`, {
+    const res = await fetch(`https://avtobozor.onrender.com/mahsulot/${id}/`, {
       cache: "no-store"
     });
     if (!res.ok) return null;
@@ -45,7 +45,7 @@ export default async function CarDetailPage({ params }: { params: any }) {
   }
 
   const imageUrl = car.image
-    ? (car.image.startsWith('http') ? car.image : `http://127.0.0.1:8000${car.image}`)
+    ? (car.image.startsWith('http') ? car.image : `https://avtobozor.onrender.com${car.image}`)
     : '/placeholder.jpg';
 
   const phoneNumber = car.owner_phone || "+998901234567";
@@ -183,7 +183,7 @@ export default async function CarDetailPage({ params }: { params: any }) {
                     </Button>
                   </a>
                 </div>
-                
+
                 {/* 15-DAQIQALIK TAHRIRLASH TUGMASI MANA SHU YERDA */}
                 <ClientEditButton carId={car.id} />
 

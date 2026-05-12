@@ -2,17 +2,20 @@
 
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
-import { Trash2, Search, Pencil } from "lucide-react"; // Pencil ikonkasini qo'shdik
+import { Trash2, Search, Pencil } from "lucide-react";
 
 export default function PostCarPage() {
   const router = useRouter();
   const [loading, setLoading] = useState(false);
-  const [cars, setCars] = useState<any[]>([]); 
-  const [searchQuery, setSearchQuery] = useState(""); 
+  const [cars, setCars] = useState<any[]>([]);
+  const [searchQuery, setSearchQuery] = useState("");
+
+  // "KO'PROQ KO'RISH" UCHUN STATE
+  const [visibleCount, setVisibleCount] = useState(5); // Boshida 5 ta ko'rinadi
 
   const fetchCars = async () => {
     try {
-      const res = await fetch("http://127.0.0.1:8000/mahsulot/");
+      const res = await fetch("https://avtobozor.onrender.com/mahsulot/");
       if (res.ok) {
         const data = await res.json();
         setCars(data);
@@ -26,19 +29,24 @@ export default function PostCarPage() {
     fetchCars();
   }, []);
 
+  // Qidiruvga so'z yozilganda ro'yxatni avtomat qisqartirish
+  useEffect(() => {
+    setVisibleCount(5);
+  }, [searchQuery]);
+
   const handleDelete = async (id: number) => {
     const confirmDelete = window.confirm("Rostdan ham bu e'lonni butunlay o'chirib tashlamoqchimisiz?");
     if (!confirmDelete) return;
 
     try {
-      const res = await fetch(`http://127.0.0.1:8000/mahsulot/${id}/`, {
+      const res = await fetch(`https://avtobozor.onrender.com/mahsulot/${id}/`, {
         method: "DELETE",
       });
 
       if (res.ok) {
         alert("Mashina muvaffaqiyatli o'chirildi!");
-        setCars(cars.filter((car) => car.id !== id)); 
-        router.refresh(); 
+        setCars(cars.filter((car) => car.id !== id));
+        router.refresh();
       } else {
         alert("O'chirishda xatolik yuz berdi. Backendni tekshiring.");
       }
@@ -54,7 +62,6 @@ export default function PostCarPage() {
     const formElement = e.currentTarget;
     const formData = new FormData(formElement);
 
-    // 1. MAXFIY KALIT YARATAMIZ VA FORMAGA QO'SHAMIZ
     const secretKey = Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15);
     formData.append("secret_key", secretKey);
 
@@ -63,19 +70,18 @@ export default function PostCarPage() {
     const ownerPhone = formData.get("owner_phone");
 
     try {
-      const res = await fetch("http://127.0.0.1:8000/mahsulot/", {
+      const res = await fetch("https://avtobozor.onrender.com/mahsulot/", {
         method: "POST",
         body: formData,
       });
 
       if (res.ok) {
-        const createdCar = await res.json(); // YANGI MASHINA MA'LUMOTINI OLAMIZ
+        const createdCar = await res.json();
 
-        // 2. LOKAL XOTIRAGA (MIJOZ BRAUZERIGA) SAQLAB QO'YAMIZ
         const myCars = JSON.parse(localStorage.getItem('my_cars') || '{}');
         myCars[createdCar.id] = {
           secret_key: secretKey,
-          created_at: new Date().getTime() // Hozirgi vaqt
+          created_at: new Date().getTime()
         };
         localStorage.setItem('my_cars', JSON.stringify(myCars));
 
@@ -90,8 +96,8 @@ export default function PostCarPage() {
         }
 
         alert("E'lon muvaffaqiyatli qo'shildi!");
-        formElement.reset(); 
-        fetchCars(); 
+        formElement.reset();
+        fetchCars();
         router.push("/cars");
         router.refresh();
       } else {
@@ -106,9 +112,13 @@ export default function PostCarPage() {
 
   const inputClassName = "w-full h-12 md:h-14 bg-zinc-50 border border-zinc-200 rounded-2xl px-5 outline-none transition-all text-xs md:text-sm font-bold focus:bg-white focus:border-red-500 focus:ring-4 focus:ring-red-500/10 placeholder:text-zinc-400";
 
-  const filteredCars = cars.filter(car => 
+  // MA'LUMOTLARNI QISQARTIRISH MANTIG'I
+  const filteredCars = cars.filter(car =>
     car.name.toLowerCase().includes(searchQuery.toLowerCase())
   );
+
+  // Faqat visibleCount gacha bo'lgan mashinalarni qirqib olamiz
+  const currentCars = filteredCars.slice(0, visibleCount);
 
   return (
     <main className="min-h-screen bg-[#F8F9FA] py-8 md:py-16 px-4 md:px-6">
@@ -184,15 +194,15 @@ export default function PostCarPage() {
           </form>
         </div>
 
-        {/* 2-QISM: MASHINALARNI BOSHQARISH (QIDIRUV BILAN) */}
+        {/* 2-QISM: MASHINALARNI BOSHQARISH */}
         <div className="bg-white p-6 md:p-12 rounded-[32px] md:rounded-[40px] shadow-[0_20px_50px_rgba(0,0,0,0.05)] border border-zinc-100 mt-12">
-          
+
           <div className="mb-6 border-b pb-4 flex justify-between items-center">
             <h2 className="text-xl md:text-2xl font-[900] italic uppercase tracking-tighter text-zinc-900">
               E'LONLARNI <span className="text-red-600">BOSHQARISH</span>
             </h2>
             <span className="bg-zinc-100 text-zinc-600 text-[10px] md:text-xs font-bold px-3 py-1.5 rounded-full">
-              Jami: {cars.length}
+              Jami: {filteredCars.length}
             </span>
           </div>
 
@@ -208,14 +218,14 @@ export default function PostCarPage() {
           </div>
 
           <div className="space-y-3 md:space-y-4">
-            {filteredCars.map((car) => (
+            {currentCars.map((car) => (
               <div key={car.id} className="flex flex-col md:flex-row items-center justify-between p-3 md:p-4 bg-zinc-50 border border-zinc-100 rounded-2xl md:rounded-[20px] gap-4 transition-all hover:border-zinc-300">
-                
+
                 <div className="flex items-center gap-4 w-full md:w-auto">
                   <div className="w-16 h-16 rounded-xl overflow-hidden bg-white border border-zinc-100 shrink-0 shadow-sm">
-                    <img 
-                      src={car.image ? (car.image.startsWith('http') ? car.image : `http://127.0.0.1:8000${car.image}`) : '/placeholder.jpg'} 
-                      alt={car.name} 
+                    <img
+                      src={car.image ? (car.image.startsWith('http') ? car.image : `https://avtobozor.onrender.com${car.image}`) : '/placeholder.jpg'}
+                      alt={car.name}
                       className="w-full h-full object-cover"
                     />
                   </div>
@@ -225,16 +235,15 @@ export default function PostCarPage() {
                   </div>
                 </div>
 
-                {/* TAHRIRLASH VA O'CHIRISH TUGMALARI */}
                 <div className="flex items-center gap-2 w-full md:w-auto">
-                  <button 
+                  <button
                     onClick={() => router.push(`/cars/${car.id}/edit`)}
                     className="flex-1 md:w-auto h-11 px-4 bg-blue-50 hover:bg-blue-600 hover:text-white text-blue-600 border border-blue-100 rounded-xl transition-all font-black uppercase text-[10px] tracking-widest flex items-center justify-center gap-2"
                   >
                     <Pencil className="w-4 h-4" /> Tahrirlash
                   </button>
 
-                  <button 
+                  <button
                     onClick={() => handleDelete(car.id)}
                     className="flex-1 md:w-auto h-11 px-4 bg-red-50 hover:bg-red-600 hover:text-white text-red-600 border border-red-100 rounded-xl transition-all font-black uppercase text-[10px] tracking-widest flex items-center justify-center gap-2"
                   >
@@ -250,8 +259,20 @@ export default function PostCarPage() {
               </p>
             )}
           </div>
-        </div>
 
+          {/* BARCHA E'LONLARNI KO'RISH TUGMASI */}
+          {filteredCars.length > visibleCount && (
+            <div className="mt-8 pt-6 border-t border-zinc-100 text-center">
+              <button
+                onClick={() => setVisibleCount(filteredCars.length)}
+                className="inline-flex items-center justify-center h-12 px-8 bg-zinc-900 hover:bg-red-600 text-white rounded-full font-black uppercase text-[10px] md:text-xs tracking-widest transition-all shadow-lg active:scale-95"
+              >
+                Barcha e'lonlarni ko'rish ({filteredCars.length - visibleCount} ta qoldi)
+              </button>
+            </div>
+          )}
+
+        </div>
       </div>
     </main>
   );

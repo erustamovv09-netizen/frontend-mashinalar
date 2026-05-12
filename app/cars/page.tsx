@@ -2,7 +2,7 @@ import Link from "next/link";
 
 async function getData() {
   try {
-    const res = await fetch("http://127.0.0.1:8000/mahsulot/", { cache: "no-store" });
+    const res = await fetch("https://avtobozor.onrender.com/mahsulot/", { cache: "no-store" });
     if (!res.ok) throw new Error(`Xatolik: ${res.status}`);
     return await res.json();
   } catch (error) {
@@ -13,10 +13,10 @@ async function getData() {
 
 export default async function Page({ searchParams }: { searchParams: Promise<{ search?: string }> }) {
   const params = await searchParams;
-  const query = params.search || ""; 
-  
+  const query = params.search || "";
+
   const allData = await getData();
-  const data = query 
+  const data = query
     ? allData.filter((item: any) => item.name.toLowerCase().includes(query.toLowerCase()))
     : allData;
 
@@ -31,19 +31,19 @@ export default async function Page({ searchParams }: { searchParams: Promise<{ s
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6">
           {data.length > 0 ? data.map((item: any) => (
             <div key={item.id} className="bg-white border border-zinc-200 rounded-2xl md:rounded-[20px] overflow-hidden shadow-sm hover:shadow-xl transition-all duration-300 group flex flex-col">
-              
+
               {/* Rasm qismi */}
               <div className="relative h-48 md:h-52 overflow-hidden bg-zinc-100 shrink-0">
-                <img 
-                  src={item.image ? (item.image.startsWith('http') ? item.image : `http://127.0.0.1:8000${item.image}`) : '/placeholder.jpg'} 
-                  alt={item.name} 
-                  className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" 
+                <img
+                  src={item.image ? (item.image.startsWith('http') ? item.image : `https://avtobozor.onrender.com${item.image}`) : '/placeholder.jpg'}
+                  alt={item.name}
+                  className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
                 />
                 <div className="absolute top-3 left-3 bg-red-600 text-white text-[9px] md:text-[10px] font-black px-2.5 py-1 rounded-md uppercase tracking-widest shadow-md">
                   Sotuvda
                 </div>
               </div>
-              
+
               {/* Ma'lumot qismi: flex-grow orqali kartochka bo'yi bir xil qilinib, tugmalar doim pastga tushiriladi */}
               <div className="p-4 md:p-5 flex flex-col flex-grow">
                 <Link href={`/cars/${item.id}`}>
@@ -51,17 +51,17 @@ export default async function Page({ searchParams }: { searchParams: Promise<{ s
                     {item.name}
                   </h2>
                 </Link>
-                
+
                 <div className="flex items-center justify-between mt-2">
                   <span className="text-xl md:text-2xl font-black text-zinc-900 tracking-tighter">
                     {Number(item.price).toLocaleString()} <span className="text-lg md:text-xl text-red-600">$</span>
                   </span>
                 </div>
-                
+
                 <p className="text-zinc-500 text-xs md:text-sm mt-2 md:mt-3 line-clamp-2 leading-relaxed flex-grow font-medium">
                   {item.description}
                 </p>
-                
+
                 <Link href={`/cars/${item.id}`} className="block mt-4 md:mt-5">
                   <button className="w-full py-2.5 md:py-3 bg-zinc-900 hover:bg-red-600 text-white text-[10px] md:text-xs font-black uppercase tracking-widest rounded-xl transition-all active:scale-95 shadow-md">
                     Batafsil ko'rish
@@ -72,7 +72,7 @@ export default async function Page({ searchParams }: { searchParams: Promise<{ s
             </div>
           )) : (
             <div className="col-span-1 sm:col-span-2 lg:col-span-3 text-center py-20">
-               <p className="text-zinc-400 font-black italic uppercase text-sm tracking-widest">Hech narsa topilmadi</p>
+              <p className="text-zinc-400 font-black italic uppercase text-sm tracking-widest">Hech narsa topilmadi</p>
             </div>
           )}
         </div>

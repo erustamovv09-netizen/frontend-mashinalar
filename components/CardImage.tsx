@@ -5,7 +5,7 @@ import Link from "next/link"
 
 async function getData() {
     try {
-        const res = await fetch("http://127.0.0.1:8000/mahsulot/", { cache: "no-store" });
+        const res = await fetch("https://avtobozor.onrender.com/mahsulot/", { cache: "no-store" });
         if (!res.ok) return [];
         return res.json();
     } catch (e) {
@@ -27,13 +27,13 @@ export default async function CardImage() {
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5 md:gap-8">
                 {data.map((item: any) => {
                     // Rasmlar manzilini to'g'rilash (Django'dan kelganda sinib qolmasligi uchun)
-                    const imageUrl = item.image 
-                        ? (item.image.startsWith('http') ? item.image : `http://127.0.0.1:8000${item.image}`) 
+                    const imageUrl = item.image
+                        ? (item.image.startsWith('http') ? item.image : `https://avtobozor.onrender.com${item.image}`)
                         : '/placeholder.jpg';
 
                     return (
                         <Card key={item.id} className="overflow-hidden border-none shadow-md hover:shadow-2xl transition-all duration-300 flex flex-col">
-                            
+
                             <Link href={`/cars/${item.id}`} className="shrink-0">
                                 <div className="relative aspect-[16/10] overflow-hidden bg-zinc-100">
                                     <img
@@ -70,7 +70,7 @@ export default async function CardImage() {
                                     <Link href={`/cars/${item.id}`}>Batafsil ko'rish</Link>
                                 </Button>
                             </CardFooter>
-                            
+
                         </Card>
                     );
                 })}

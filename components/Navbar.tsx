@@ -1,10 +1,10 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, Suspense } from "react";
 import { useRouter, useSearchParams } from "next/navigation"; 
 import Link from "next/link";
 
-export default function Navbar() {
+function NavbarContent() {
   const router = useRouter();
   const searchParams = useSearchParams(); 
   const [searchQuery, setSearchQuery] = useState("");
@@ -128,5 +128,12 @@ export default function Navbar() {
         </div>
       )}
     </nav>
+  );
+}
+export default function Navbar() {
+  return (
+    <Suspense fallback={<div></div>}>
+      <NavbarContent />
+    </Suspense>
   );
 }

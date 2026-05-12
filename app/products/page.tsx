@@ -1,5 +1,5 @@
 export default async function Home() {
-    const res = await fetch("https://avtobozor.onrender.com/mashinalar");
+    const res = await fetch("https://avtobozor.onrender.com/mashinalar/");
     const data = await res.json();
 
 

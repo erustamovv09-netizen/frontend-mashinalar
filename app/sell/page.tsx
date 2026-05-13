@@ -34,31 +34,18 @@ export default function SellCarPage() {
     `;
 
     try {
-      const response = await fetch(`https://api.telegram.org/bot${botToken}/sendMessage`, {
+      await fetch(`https://api.telegram.org/bot${botToken}/sendMessage`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           chat_id: chatId,
-          text: message
-          // parse_mode qatori butunlay olib tashlandi
+          text: message,
+          parse_mode: "Markdown",
         }),
       });
-
-      // Telegramdan kelgan aniq javobni o'qiymiz
-      const result = await response.json();
-
-      if (response.ok) {
-        // Agar haqiqatdan ham botga yetib borsa
-        alert("So'rovingiz yuborildi! Tez orada siz bilan bog'lanamiz.");
-      } else {
-        // Agar Telegram qandaydir sabab bilan qabul qilmasa, aniq aybini ko'rsatamiz
-        alert("Botga bormadi! Sababi: " + result.description);
-        console.log("Telegram xatosi:", result);
-      }
-      
+      alert("So'rovingiz yuborildi! Tez orada siz bilan bog'lanamiz.");
     } catch (error) {
-      alert("Internet yoki tarmoq xatosi yuz berdi. Qayta urinib ko'ring.");
-      console.error("Tarmoq xatosi:", error);
+      alert("Xatolik yuz berdi. Qayta urinib ko'ring.");
     } finally {
       setLoading(false);
     }

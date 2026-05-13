@@ -1,12 +1,12 @@
 "use client";
 
 import { useState, useEffect, Suspense } from "react";
-import { useRouter, useSearchParams } from "next/navigation"; 
+import { useRouter, useSearchParams } from "next/navigation";
 import Link from "next/link";
 
 function NavbarContent() {
   const router = useRouter();
-  const searchParams = useSearchParams(); 
+  const searchParams = useSearchParams();
   const [searchQuery, setSearchQuery] = useState("");
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
@@ -18,13 +18,13 @@ function NavbarContent() {
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const term = e.target.value;
     setSearchQuery(term);
-    
+
     if (term.trim()) {
       // Yozuv bor bo'lsa, /cars ga borib qidiradi
       router.push(`/cars?search=${encodeURIComponent(term.trim())}`);
     } else {
       // YOZUV O'CHIRILSA, BOSH SAHIFAGA QAYTADI
-      router.push("/"); 
+      router.push("/");
     }
   };
 
@@ -66,7 +66,7 @@ function NavbarContent() {
             <input
               type="text"
               value={searchQuery}
-              onChange={handleInputChange} 
+              onChange={handleInputChange}
               placeholder="Qidiruv..."
               className="w-full h-11 bg-zinc-100 border border-transparent rounded-full pl-12 pr-4 outline-none transition-all text-sm font-bold italic focus:bg-white focus:border-red-500 focus:ring-4 focus:ring-red-500/10"
             />
@@ -104,7 +104,7 @@ function NavbarContent() {
           <input
             type="text"
             value={searchQuery}
-            onChange={handleInputChange} 
+            onChange={handleInputChange}
             placeholder="Mashina qidiring..."
             className="w-full h-10 bg-zinc-100 border border-transparent rounded-xl pl-10 pr-4 outline-none transition-all text-xs font-bold italic focus:bg-white focus:border-red-500 focus:ring-2 focus:ring-red-500/20"
           />

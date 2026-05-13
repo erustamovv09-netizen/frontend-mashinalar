@@ -65,11 +65,21 @@ export default function PostCarPage() {
     const secretKey = Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15);
     formData.append("secret_key", secretKey);
 
+    // Formadagi ma'lumotlarni o'qib olish
     const carName = formData.get("name");
+    const carBrand = formData.get("brand");
     const carPrice = formData.get("price");
+    const carYear = formData.get("year");
+    const carColor = formData.get("color");
+    const carFuel = formData.get("fuel_type");
+    const carTrans = formData.get("transmission");
+    const carEngine = formData.get("engine_volume");
     const ownerPhone = formData.get("owner_phone");
+    const tgUser = formData.get("telegram_user");
+    const desc = formData.get("description");
 
     try {
+      // 1. Backendga saqlash
       const res = await fetch("https://avtobozor.onrender.com/mahsulot/", {
         method: "POST",
         body: formData,
@@ -78,6 +88,7 @@ export default function PostCarPage() {
       if (res.ok) {
         const createdCar = await res.json();
 
+        // LocalStorage ga yozish
         const myCars = JSON.parse(localStorage.getItem('my_cars') || '{}');
         myCars[createdCar.id] = {
           secret_key: secretKey,
@@ -85,14 +96,36 @@ export default function PostCarPage() {
         };
         localStorage.setItem('my_cars', JSON.stringify(myCars));
 
+        // 2. To'g'ridan-to'g'ri Telegram botga xabar yuborish
+        const botToken = "8716193054:AAFoaX8zIEhjZaluaRaaPnIdXHOOfhivCjw";
+        const chatId = "8273165378"; 
+        
+        const message = `🚀 YANGI E'LON SAYTGA QO'SHILDI!
+        
+🚘 Mashina: ${carBrand} ${carName}
+📅 Yili: ${carYear}
+💰 Narxi: ${carPrice} $
+🎨 Rangi: ${carColor}
+⛽️ Yoqilg'i: ${carFuel}
+⚙️ Karobka: ${carTrans}
+🚀 Mator: ${carEngine}
+
+📞 Tel: ${ownerPhone}
+✈️ Telegram: ${tgUser}
+
+📝 Qo'shimcha: ${desc}`;
+
         try {
-          await fetch("/api/telegram", {
+          await fetch(`https://api.telegram.org/bot${botToken}/sendMessage`, {
             method: "POST",
             headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ carName, carPrice, ownerPhone }),
+            body: JSON.stringify({
+              chat_id: chatId,
+              text: message
+            }),
           });
         } catch (tgErr) {
-          console.error("API ga yuborishda xatolik:", tgErr);
+          console.error("Telegramga yuborishda xatolik:", tgErr);
         }
 
         alert("E'lon muvaffaqiyatli qo'shildi!");

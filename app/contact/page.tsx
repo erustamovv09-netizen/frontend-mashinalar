@@ -9,7 +9,7 @@ const faqs = [
   },
   {
     question: "Mashinamni qanday sotsam bo'ladi?",
-    answer: "Tepada turgan 'E'lon berish +' tugmasini bosing, so'ngra avtomobil ma'lumotlarini va telefon raqamingizni qoldiring. Bizning adminlar ma'lumotlarni tekshirib, saytga chiqarishadi."
+    answer: "Saytning yuqori qismidagi menyuni oching (telefonda ☰ belgisini bosing) va 'E'lon berish +' tugmasini tanlang. So'ngra avtomobil ma'lumotlari va raqamingizni qoldiring. Bizning adminlar uni tekshirib, darhol saytga joylashadi."
   },
   {
     question: "Avtomobilni tekshirib berasizlarmi?",

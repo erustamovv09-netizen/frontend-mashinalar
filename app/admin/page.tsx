@@ -246,6 +246,7 @@ export default function PostCarPage() {
             <Search className="absolute left-4 text-zinc-400 w-5 h-5 z-10" />
             <input
               type="text"
+              inputMode="tel"
               placeholder="Mashina nomini yozib qidiring..."
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}

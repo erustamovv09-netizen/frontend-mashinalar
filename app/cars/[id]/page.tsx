@@ -11,10 +11,10 @@ import {
   Gauge,
   Palette,
   ShieldCheck,
-  MapPin
+  MapPin,
+  Route // YURGAN MASOFA UCHUN YANGI IKONA
 } from "lucide-react";
 import Link from "next/link";
-// YANGI TUGMA IMPORT QILINDI
 import ClientEditButton from "@/components/ClientEditButton";
 
 async function getSingleCar(id: string) {
@@ -78,9 +78,12 @@ export default async function CarDetailPage({ params }: { params: any }) {
                 <Badge className="bg-white/90 backdrop-blur text-black px-4 py-2 rounded-2xl text-xs font-black shadow-xl border-none uppercase">
                   {car.year}-YIL
                 </Badge>
-                <Badge className="bg-red-600 text-white px-4 py-2 rounded-2xl text-xs font-black shadow-xl border-none uppercase tracking-widest">
-                  YANGI
-                </Badge>
+                {/* Agar probeg 0 bo'lsa YOKI umuman kiritilmagan bo'lsa "YANGI" belgisini chiqaramiz */}
+                {(!car.mileage || Number(car.mileage) === 0) && (
+                  <Badge className="bg-red-600 text-white px-4 py-2 rounded-2xl text-xs font-black shadow-xl border-none uppercase tracking-widest">
+                    YANGI
+                  </Badge>
+                )}
               </div>
             </div>
 
@@ -111,6 +114,16 @@ export default async function CarDetailPage({ params }: { params: any }) {
                   {Number(car.price).toLocaleString()}
                 </span>
                 <span className="text-3xl md:text-4xl font-bold text-red-600">$</span>
+              </div>
+
+              {/* YANGI QO'SHILGAN YURGAN MASOFA QUTICHASI */}
+              <div className="p-3 md:p-4 rounded-2xl bg-zinc-50 border border-zinc-100 mb-2 md:mb-3">
+                <div className="flex items-center gap-2 text-[9px] md:text-[10px] font-bold text-zinc-400 uppercase mb-1">
+                  <Route className="w-3 h-3" /> Yurgan masofasi
+                </div>
+                <p className="font-black text-zinc-900 text-sm md:text-base italic">
+                  {car.mileage ? `${Number(car.mileage).toLocaleString()} km` : "0 km (Salondan)"}
+                </p>
               </div>
 
               <div className="grid grid-cols-2 gap-2 md:gap-3 mb-8">
@@ -184,7 +197,6 @@ export default async function CarDetailPage({ params }: { params: any }) {
                   </a>
                 </div>
 
-                {/* 15-DAQIQALIK TAHRIRLASH TUGMASI MANA SHU YERDA */}
                 <ClientEditButton carId={car.id} />
 
               </div>

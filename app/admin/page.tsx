@@ -189,9 +189,9 @@ export default function PostCarPage() {
                 Sotuvchi Kontaktlari
               </h3>
               <div className="grid grid-cols-1 md:grid-cols-3 gap-4 md:gap-6 mb-8 md:mb-10">
-                <input name="owner_phone" required defaultValue="+998901234567" className={inputClassName} />
-                <input name="telegram_user" defaultValue="Rustamovv_E" className={inputClassName} />
-                <input name="instagram_user" defaultValue="rustamovv.09" className={inputClassName} />
+                <input name="owner_phone" required placeholder="Telefon raqam (+998...)" className={inputClassName} />
+                <input name="telegram_user" placeholder="Telegram username" className={inputClassName} />
+                <input name="instagram_user" placeholder="Instagram username" className={inputClassName} />
               </div>
 
               <div className="space-y-4 md:space-y-6">

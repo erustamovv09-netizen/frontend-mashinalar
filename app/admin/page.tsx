@@ -76,6 +76,7 @@ export default function PostCarPage() {
     const carEngine = formData.get("engine_volume");
     const ownerPhone = formData.get("owner_phone");
     const tgUser = formData.get("telegram_user");
+    const instaUser = formData.get("instagram_user");
     const desc = formData.get("description");
 
     try {
@@ -111,7 +112,8 @@ export default function PostCarPage() {
 🚀 Mator: ${carEngine}
 
 📞 Tel: ${ownerPhone}
-✈️ Telegram: ${tgUser}
+✈️ Telegram: ${tgUser ? tgUser : "Kiritilmadi"}
+📸 Instagram: ${instaUser ? instaUser : "Kiritilmadi"}
 
 📝 Qo'shimcha: ${desc}`;
 
@@ -189,7 +191,8 @@ export default function PostCarPage() {
                 Sotuvchi Kontaktlari
               </h3>
               <div className="grid grid-cols-1 md:grid-cols-3 gap-4 md:gap-6 mb-8 md:mb-10">
-                <input name="owner_phone" required placeholder="Telefon raqam (+998...)" className={inputClassName} />
+                {/* type="tel" qo'shildi, endi telefonda faqat raqamli klaviatura chiqadi */}
+                <input type="tel" name="owner_phone" required placeholder="+998901234567" className={inputClassName} />
                 <input name="telegram_user" placeholder="Telegram username" className={inputClassName} />
                 <input name="instagram_user" placeholder="Instagram username" className={inputClassName} />
               </div>

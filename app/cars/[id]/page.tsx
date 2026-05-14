@@ -116,7 +116,7 @@ export default async function CarDetailPage({ params }: { params: any }) {
                 <span className="text-3xl md:text-4xl font-bold text-red-600">$</span>
               </div>
 
-              {/* YANGI QO'SHILGAN YURGAN MASOFA QUTICHASI */}
+              {/* YURGAN MASOFASI */}
               <div className="p-3 md:p-4 rounded-2xl bg-zinc-50 border border-zinc-100 mb-2 md:mb-3">
                 <div className="flex items-center gap-2 text-[9px] md:text-[10px] font-bold text-zinc-400 uppercase mb-1">
                   <Route className="w-3 h-3" /> Yurgan masofasi

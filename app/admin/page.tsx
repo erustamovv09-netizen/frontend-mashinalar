@@ -70,6 +70,7 @@ export default function PostCarPage() {
     const carBrand = formData.get("brand");
     const carPrice = formData.get("price");
     const carYear = formData.get("year");
+    const carMileage = formData.get("mileage");
     const carColor = formData.get("color");
     const carFuel = formData.get("fuel_type");
     const carTrans = formData.get("transmission");
@@ -181,6 +182,7 @@ export default function PostCarPage() {
                 <input name="brand" required placeholder="Brend" className={inputClassName} />
                 <input name="price" type="number" required placeholder="Narxi ($)" className={inputClassName} />
                 <input name="year" type="number" required placeholder="Yili" className={inputClassName} />
+                <input name="mileage" type="number" required placeholder="Yurgan masofasi (km)" className={inputClassName} />
                 <input name="color" required placeholder="Rangi" className={inputClassName} />
                 <input name="fuel_type" required placeholder="Yoqilg'i turi" className={inputClassName} />
                 <input name="transmission" required placeholder="Uzatmalar qutisi" className={inputClassName} />

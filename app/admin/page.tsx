@@ -187,9 +187,14 @@ export default function PostCarPage() {
                 <input name="fuel_type" required placeholder="Yoqilg'i turi" className={inputClassName} />
                 <input name="transmission" required placeholder="Uzatmalar qutisi" className={inputClassName} />
                 
-                {/* 9-qutini to'liq kenglikda cho'zib markazga tushirish */}
-                <div className="md:col-span-2">
-                  <input name="engine_volume" required placeholder="Dvigatel hajmi" className={inputClassName} />
+                {/* Dvigatel hajmi o'rtaga, o'zining standart o'lchamida joylashtirildi */}
+                <div className="md:col-span-2 flex justify-center">
+                  <input 
+                    name="engine_volume" 
+                    required 
+                    placeholder="Dvigatel hajmi" 
+                    className={`${inputClassName} md:max-w-[calc(50%-12px)]`} 
+                  />
                 </div>
               </div>
 

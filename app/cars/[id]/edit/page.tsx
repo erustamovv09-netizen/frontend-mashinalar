@@ -30,13 +30,13 @@ export default function EditCarPage() {
         fetchCar();
     }, [id, router]);
 
-    const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
         setLoading(true);
 
         const formElement = e.currentTarget;
         const formData = new FormData(formElement);
-        const mileage = formData.get("mileage");
+        // const mileage = formData.get("mileage"); <-- SHU QATORNI O'CHIRAMIZ
 
         // MUHIM MANTIQ: Agar yangi rasm tanlanmagan bo'lsa, eski rasm o'chib ketmasligi uchun uni formadan olib tashlaymiz
         const imageFile = formData.get("image") as File;

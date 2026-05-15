@@ -36,6 +36,7 @@ export default function EditCarPage() {
 
         const formElement = e.currentTarget;
         const formData = new FormData(formElement);
+        const mileage = formData.get("mileage");
 
         // MUHIM MANTIQ: Agar yangi rasm tanlanmagan bo'lsa, eski rasm o'chib ketmasligi uchun uni formadan olib tashlaymiz
         const imageFile = formData.get("image") as File;

@@ -180,7 +180,7 @@ export default function PostCarPage() {
               
               {/* 1. MASHINA NOMI - TO'LIQ KENGILIKDA */}
               <div className="mb-4 md:mb-6">
-                <input name="name" required placeholder="Mashina nomi (Masalan: Chevrolet Malibu 2)" className={inputClassName} />
+                <input name="name" required placeholder="Mashina nomi (Chevrolet Malibu 2)" className={inputClassName} />
               </div>
 
               {/* 2. QOLGAN 8 TA PARAMETR - MUKAMMAL 2 USTUNLI JUFTLIK */}
@@ -194,7 +194,7 @@ export default function PostCarPage() {
                 <input name="color" required placeholder="Rangi" className={inputClassName} />
                 <input name="fuel_type" required placeholder="Yoqilg'i turi" className={inputClassName} />
                 
-                <input name="transmission" required placeholder="Uzatmalar qutisi" className={inputClassName} />
+                <input name="transmission" required placeholder="Uzatmalar qutisi (avtomat/mexanika)" className={inputClassName} />
                 <input name="engine_volume" required placeholder="Dvigatel hajmi" className={inputClassName} />
               </div>
 

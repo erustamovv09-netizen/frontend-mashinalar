@@ -177,25 +177,25 @@ export default function PostCarPage() {
               <h3 className="text-xs md:text-sm font-black uppercase tracking-widest text-red-600 mb-4 md:mb-6 border-b pb-2">
                 Texnik Ma'lumotlar
               </h3>
+              
+              {/* 1. MASHINA NOMI - TO'LIQ KENGILIKDA */}
+              <div className="mb-4 md:mb-6">
+                <input name="name" required placeholder="Mashina nomi (Masalan: Chevrolet Malibu 2)" className={inputClassName} />
+              </div>
+
+              {/* 2. QOLGAN 8 TA PARAMETR - MUKAMMAL 2 USTUNLI JUFTLIK */}
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6 mb-8 md:mb-10">
-                <input name="name" required placeholder="Mashina nomi" className={inputClassName} />
                 <input name="brand" required placeholder="Brend" className={inputClassName} />
                 <input name="price" type="number" required placeholder="Narxi ($)" className={inputClassName} />
+                
                 <input name="year" type="number" required placeholder="Yili" className={inputClassName} />
                 <input name="mileage" type="number" required placeholder="Yurgan masofasi (km)" className={inputClassName} />
+                
                 <input name="color" required placeholder="Rangi" className={inputClassName} />
                 <input name="fuel_type" required placeholder="Yoqilg'i turi" className={inputClassName} />
-                <input name="transmission" required placeholder="Uzatmalar qutisi" className={inputClassName} />
                 
-                {/* Dvigatel hajmi o'rtaga, o'zining standart o'lchamida joylashtirildi */}
-                <div className="md:col-span-2 flex justify-center">
-                  <input 
-                    name="engine_volume" 
-                    required 
-                    placeholder="Dvigatel hajmi" 
-                    className={`${inputClassName} md:max-w-[calc(50%-12px)]`} 
-                  />
-                </div>
+                <input name="transmission" required placeholder="Uzatmalar qutisi" className={inputClassName} />
+                <input name="engine_volume" required placeholder="Dvigatel hajmi" className={inputClassName} />
               </div>
 
               <h3 className="text-xs md:text-sm font-black uppercase tracking-widest text-red-600 mb-4 md:mb-6 border-b pb-2">

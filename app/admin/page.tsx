@@ -186,7 +186,11 @@ export default function PostCarPage() {
                 <input name="color" required placeholder="Rangi" className={inputClassName} />
                 <input name="fuel_type" required placeholder="Yoqilg'i turi" className={inputClassName} />
                 <input name="transmission" required placeholder="Uzatmalar qutisi" className={inputClassName} />
-                <input name="engine_volume" required placeholder="Dvigatel hajmi" className={inputClassName} />
+                
+                {/* 9-qutini to'liq kenglikda cho'zib markazga tushirish */}
+                <div className="md:col-span-2">
+                  <input name="engine_volume" required placeholder="Dvigatel hajmi" className={inputClassName} />
+                </div>
               </div>
 
               <h3 className="text-xs md:text-sm font-black uppercase tracking-widest text-red-600 mb-4 md:mb-6 border-b pb-2">

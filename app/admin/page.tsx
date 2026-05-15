@@ -197,6 +197,7 @@ export default function PostCarPage() {
                   />
                 </div>
               </div>
+              
 
               <h3 className="text-xs md:text-sm font-black uppercase tracking-widest text-red-600 mb-4 md:mb-6 border-b pb-2">
                 Sotuvchi Kontaktlari

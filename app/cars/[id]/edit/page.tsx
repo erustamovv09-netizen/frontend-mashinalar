@@ -88,13 +88,22 @@ export default function EditCarPage() {
                             <h3 className="text-xs md:text-sm font-black uppercase tracking-widest text-blue-600 mb-4 md:mb-6 border-b pb-2">
                                 Texnik Ma'lumotlar
                             </h3>
+                            
+                            {/* 1. MASHINA NOMI - TO'LIQ KENGILIKDA */}
+                            <div className="mb-4 md:mb-6">
+                                <input name="name" defaultValue={car.name} required placeholder="Mashina nomi (Masalan: Chevrolet Malibu 2)" className={inputClassName} />
+                            </div>
+
                             <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6 mb-8 md:mb-10">
-                                <input name="name" defaultValue={car.name} required placeholder="Mashina nomi" className={inputClassName} />
                                 <input name="brand" defaultValue={car.brand} required placeholder="Brend" className={inputClassName} />
                                 <input name="price" defaultValue={car.price} type="number" required placeholder="Narxi ($)" className={inputClassName} />
+                                
                                 <input name="year" defaultValue={car.year} type="number" required placeholder="Yili" className={inputClassName} />
+                                <input name="mileage" defaultValue={car.mileage} type="number" required placeholder="Yurgan masofasi (km)" className={inputClassName} />
+                                
                                 <input name="color" defaultValue={car.color} required placeholder="Rangi" className={inputClassName} />
                                 <input name="fuel_type" defaultValue={car.fuel_type} required placeholder="Yoqilg'i turi" className={inputClassName} />
+                                
                                 <input name="transmission" defaultValue={car.transmission} required placeholder="Uzatmalar qutisi" className={inputClassName} />
                                 <input name="engine_volume" defaultValue={car.engine_volume} required placeholder="Dvigatel hajmi" className={inputClassName} />
                             </div>

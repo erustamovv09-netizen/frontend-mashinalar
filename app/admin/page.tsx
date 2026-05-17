@@ -137,7 +137,8 @@ export default function PostCarPage() {
         router.push("/cars");
         router.refresh();
       } else {
-        alert("Xatolik yuz berdi. Barcha maydonlarni to'ldirganingizni tekshiring.");
+        const errorText = await res.text();
+        alert("DIQQAT! Backend qabul qilmadi. Sababi: \n\n" + errorText);
       }
     } catch (error) {
       alert("Server bilan aloqa bog'lanmadi.");

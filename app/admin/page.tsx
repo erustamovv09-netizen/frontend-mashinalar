@@ -106,15 +106,16 @@ export default function PostCarPage() {
         
 🚘 Mashina: ${carBrand} ${carName}
 📅 Yili: ${carYear}
-💰 Narxi: ${carPrice} $
+🛣 Yurgan masofasi: ${carMileage}
+💰 Narxi: ${carPrice} 
 🎨 Rangi: ${carColor}
 ⛽️ Yoqilg'i: ${carFuel}
 ⚙️ Karobka: ${carTrans}
 🚀 Mator: ${carEngine}
 
 📞 Tel: ${ownerPhone}
-✈️ Telegram: ${tgUser ? tgUser : "Kiritilmadi"}
-📸 Instagram: ${instaUser ? instaUser : "Kiritilmadi"}
+✈️ Telegram: ${tgUser ? (tgUser.toString().startsWith('@') ? tgUser : '@' + tgUser) : "Kiritilmadi"}
+📸 Instagram: ${instaUser ? 'https://instagram.com/' + instaUser.toString().replace('@', '') : "Kiritilmadi"}
 
 📝 Qo'shimcha: ${desc}`;
 

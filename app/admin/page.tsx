@@ -113,7 +113,7 @@ export default function PostCarPage() {
 ⚙️ Karobka: ${carTrans}
 🚀 Mator: ${carEngine}
 
-📞 Tel: ${ownerPhone}
+📞 Tel: ${String(ownerPhone).startsWith('+') ? ownerPhone : '+998' + String(ownerPhone).replace(/^998/, '').replace(/\s+/g, '')}
 ✈️ Telegram: ${tgUser ? (tgUser.toString().startsWith('@') ? tgUser : '@' + tgUser) : "Kiritilmadi"}
 📸 Instagram: ${instaUser ? 'https://instagram.com/' + instaUser.toString().replace('@', '') : "Kiritilmadi"}
 

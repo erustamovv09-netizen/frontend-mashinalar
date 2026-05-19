@@ -79,7 +79,7 @@ export default function PostCarPage() {
     const tgUser = formData.get("telegram_user");
     const instaUser = formData.get("instagram_user");
     const desc = formData.get("description");
-  
+
 
     try {
       // 1. Backendga saqlash

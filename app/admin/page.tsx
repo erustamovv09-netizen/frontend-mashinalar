@@ -80,6 +80,7 @@ export default function PostCarPage() {
     const instaUser = formData.get("instagram_user");
     const desc = formData.get("description");
 
+    
     try {
       // 1. Backendga saqlash
       const res = await fetch("https://avtobozor.onrender.com/mahsulot/", {

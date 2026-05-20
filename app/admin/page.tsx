@@ -309,7 +309,6 @@ export default function PostCarPage() {
               </p>
             )}
           </div>
-  
 
           {/* BARCHA E'LONLARNI KO'RISH TUGMASI */}
           {filteredCars.length > visibleCount && (

@@ -1,0 +1,251 @@
+"use client";
+
+import { useState, useEffect } from "react";
+import { useRouter } from "next/navigation";
+import { Search, Pencil, Clock } from "lucide-react"; 
+
+export default function PostCarPublicPage() {
+  const router = useRouter();
+  const [loading, setLoading] = useState(false);
+  const [cars, setCars] = useState<any[]>([]);
+  const [searchQuery, setSearchQuery] = useState("");
+  const [visibleCount, setVisibleCount] = useState(5);
+  
+  // Foydalanuvchining o'zi qo'shgan mashinalari va hozirgi vaqtni kuzatish uchun
+  const [myCars, setMyCars] = useState<any>({});
+  const [currentTime, setCurrentTime] = useState(Date.now());
+
+  const fetchCars = async () => {
+    try {
+      const res = await fetch("https://avtobozor.onrender.com/mahsulot/");
+      if (res.ok) {
+        const data = await res.json();
+        setCars(data);
+      }
+    } catch (error) {
+      console.error("Mashinalarni yuklashda xatolik:", error);
+    }
+  };
+
+  useEffect(() => {
+    fetchCars();
+    // Brauzer xotirasidan faqat shu odam qo'shgan mashinalarni o'qib olish
+    setMyCars(JSON.parse(localStorage.getItem('my_cars') || '{}'));
+
+    // Har daqiqada vaqtni yangilab turish (15 minut o'tganini hisoblash uchun)
+    const timer = setInterval(() => setCurrentTime(Date.now()), 60000);
+    return () => clearInterval(timer);
+  }, []);
+
+  useEffect(() => {
+    setVisibleCount(5);
+  }, [searchQuery]);
+
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    setLoading(true);
+
+    const formElement = e.currentTarget;
+    const formData = new FormData(formElement);
+
+    const secretKey = Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15);
+    formData.append("secret_key", secretKey);
+
+    const carName = formData.get("name");
+    const carBrand = formData.get("brand");
+    const carPrice = formData.get("price");
+    const carYear = formData.get("year");
+    const carMileage = formData.get("mileage");
+    const carColor = formData.get("color");
+    const carFuel = formData.get("fuel_type");
+    const carTrans = formData.get("transmission");
+    const carEngine = formData.get("engine_volume");
+    const ownerPhone = formData.get("owner_phone");
+    const tgUser = formData.get("telegram_user");
+    const instaUser = formData.get("instagram_user");
+    const desc = formData.get("description");
+
+    try {
+      const res = await fetch("https://avtobozor.onrender.com/mahsulot/", {
+        method: "POST",
+        body: formData,
+      });
+
+      if (res.ok) {
+        const createdCar = await res.json();
+        // Xotiraga mashina ID si va yaratilgan vaqtni yozib qo'yamiz
+        const updatedMyCars = JSON.parse(localStorage.getItem('my_cars') || '{}');
+        updatedMyCars[createdCar.id] = { secret_key: secretKey, created_at: new Date().getTime() };
+        localStorage.setItem('my_cars', JSON.stringify(updatedMyCars));
+        setMyCars(updatedMyCars);
+
+        const botToken = "8716193054:AAFoaX8zIEhjZaluaRaaPnIdXHOOfhivCjw";
+        const chatId = "8273165378"; 
+        const message = `🚀 YANGI E'LON SAYTGA QO'SHILDI!
+        
+🚘 Mashina: ${carBrand} ${carName}
+📅 Yili: ${carYear}
+🛣 Yurgan masofasi: ${carMileage}
+💰 Narxi: ${carPrice} 
+🎨 Rangi: ${carColor}
+⛽️ Yoqilg'i: ${carFuel}
+⚙️ Karobka: ${carTrans}
+🚀 Mator: ${carEngine}
+
+📞 Tel: ${String(ownerPhone).startsWith('+') ? ownerPhone : '+998' + String(ownerPhone).replace(/^998/, '').replace(/\s+/g, '')}
+✈️ Telegram: ${tgUser ? (tgUser.toString().startsWith('@') ? tgUser : '@' + tgUser) : "Kiritilmadi"}
+📸 Instagram: ${instaUser ? 'https://instagram.com/' + instaUser.toString().replace('@', '') : "Kiritilmadi"}
+
+📝 Qo'shimcha: ${desc}`;
+
+        try {
+          await fetch(`https://api.telegram.org/bot${botToken}/sendMessage`, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ chat_id: chatId, text: message }),
+          });
+        } catch (tgErr) {
+          console.error("Telegramga yuborishda xatolik:", tgErr);
+        }
+
+        alert("E'lon muvaffaqiyatli qo'shildi!");
+        formElement.reset();
+        fetchCars();
+        router.push("/cars");
+        router.refresh();
+      } else {
+        const errorText = await res.text();
+        alert("DIQQAT! Backend qabul qilmadi. Sababi: \n\n" + errorText);
+      }
+    } catch (error) {
+      alert("Server bilan aloqa bog'lanmadi.");
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const inputClassName = "w-full h-12 md:h-14 bg-zinc-50 border border-zinc-200 rounded-2xl px-5 outline-none transition-all text-xs md:text-sm font-bold focus:bg-white focus:border-red-500 focus:ring-4 focus:ring-red-500/10 placeholder:text-zinc-400";
+  const filteredCars = cars.filter(car => car.name.toLowerCase().includes(searchQuery.toLowerCase()));
+  const currentCars = filteredCars.slice(0, visibleCount);
+
+  return (
+    <main className="min-h-screen bg-[#F8F9FA] py-8 md:py-16 px-4 md:px-6">
+      <div className="max-w-4xl mx-auto space-y-12">
+
+        {/* 1-QISM: MASHINA QO'SHISH FORMASI */}
+        <div>
+          <div className="mb-8 md:mb-10 text-center">
+            <h1 className="text-3xl md:text-4xl font-[900] italic uppercase tracking-tighter text-zinc-900">
+              Avtomobil <span className="text-red-600">Sotish</span>
+            </h1>
+            <p className="text-zinc-500 text-[10px] md:text-xs font-bold uppercase tracking-widest mt-2">
+              Barcha ma'lumotlarni aniq kiriting
+            </p>
+          </div>
+
+          <form onSubmit={handleSubmit} className="space-y-6">
+            <div className="bg-white p-6 md:p-12 rounded-[32px] md:rounded-[40px] shadow-[0_20px_50px_rgba(0,0,0,0.05)] border border-zinc-100">
+              <h3 className="text-xs md:text-sm font-black uppercase tracking-widest text-red-600 mb-4 md:mb-6 border-b pb-2">Texnik Ma'lumotlar</h3>
+              
+              <div className="mb-4 md:mb-6">
+                <input name="name" required placeholder="Mashina nomi (Chevrolet Malibu 2)" className={inputClassName} />
+              </div>
+
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6 mb-8 md:mb-10">
+                <input name="brand" required placeholder="Brend" className={inputClassName} />
+                <input name="price" type="number" required placeholder="Narxi ($)" className={inputClassName} />
+                <input name="year" type="number" required placeholder="Yili" className={inputClassName} />
+                <input name="mileage" type="number" required placeholder="Yurgan masofasi (km)" className={inputClassName} />
+                <input name="color" required placeholder="Rangi" className={inputClassName} />
+                <input name="fuel_type" required placeholder="Yoqilg'i turi" className={inputClassName} />
+                <input name="transmission" required placeholder="Uzatmalar qutisi (avtomat)" className={inputClassName} />
+                <input name="engine_volume" required placeholder="Dvigatel hajmi" className={inputClassName} />
+              </div>
+
+              <h3 className="text-xs md:text-sm font-black uppercase tracking-widest text-red-600 mb-4 md:mb-6 border-b pb-2">Sotuvchi Kontaktlari</h3>
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-4 md:gap-6 mb-8 md:mb-10">
+                <input type="tel" name="owner_phone" required placeholder="+998901234567" className={inputClassName} />
+                <input name="telegram_user" placeholder="Telegram username" className={inputClassName} />
+                <input name="instagram_user" placeholder="Instagram username" className={inputClassName} />
+              </div>
+
+              <div className="space-y-4 md:space-y-6">
+                <textarea name="description" rows={4} className={`${inputClassName} h-auto min-h-[100px] py-4 resize-none`} placeholder="Mashina holati haqida batafsil..." />
+                <div className="p-6 md:p-8 border-2 border-dashed border-zinc-200 rounded-[24px] bg-zinc-50 flex flex-col items-center gap-4 text-center overflow-hidden">
+                  <label className="text-[9px] md:text-[10px] font-black uppercase tracking-widest text-zinc-400">Mashina rasmini tanlang</label>
+                  <input name="image" type="file" accept="image/*" required className="w-full max-w-xs text-[10px] md:text-xs file:mr-4 file:py-2.5 file:px-5 file:rounded-full file:border-0 file:text-[10px] file:font-black file:bg-zinc-900 file:text-white hover:file:bg-red-600 transition-all cursor-pointer" />
+                </div>
+              </div>
+
+              <button type="submit" disabled={loading} className="w-full h-14 md:h-16 bg-zinc-900 hover:bg-red-600 text-white font-[900] uppercase tracking-[0.2em] rounded-[20px] md:rounded-[24px] shadow-xl transition-all active:scale-[0.98] mt-8 md:mt-10 disabled:opacity-50 text-[10px] md:text-xs">
+                {loading ? "YUBORILMOQDA..." : "E'LONNI TASDIQLASH"}
+              </button>
+            </div>
+          </form>
+        </div>
+
+        {/* 2-QISM: MASHINALAR (FAQAT TAHRIRLASH UCHUN) */}
+        <div className="bg-white p-6 md:p-12 rounded-[32px] md:rounded-[40px] shadow-[0_20px_50px_rgba(0,0,0,0.05)] border border-zinc-100 mt-12">
+          <div className="mb-6 border-b pb-4 flex justify-between items-center">
+            <h2 className="text-xl md:text-2xl font-[900] italic uppercase tracking-tighter text-zinc-900">
+              E'LONLAR <span className="text-red-600">RO'YXATI</span>
+            </h2>
+          </div>
+
+          <div className="mb-6 relative flex items-center w-full">
+            <Search className="absolute left-4 text-zinc-400 w-5 h-5 z-10" />
+            <input type="text" placeholder="Mashina nomini yozib qidiring..." value={searchQuery} onChange={(e) => setSearchQuery(e.target.value)} className="w-full h-12 md:h-14 bg-zinc-50 border border-zinc-200 rounded-2xl pl-12 pr-4 outline-none transition-all text-xs md:text-sm font-bold focus:bg-white focus:border-red-500 placeholder:text-zinc-400" />
+          </div>
+
+          <div className="space-y-3 md:space-y-4">
+            {currentCars.map((car) => {
+              // Vaqtni hisoblash mantiqi
+              const myCarInfo = myCars[car.id];
+              const timePassed = myCarInfo ? (currentTime - myCarInfo.created_at) : 0;
+              const isWithin15Mins = timePassed < 15 * 60 * 1000;
+
+              return (
+                <div key={car.id} className="flex flex-col md:flex-row items-center justify-between p-3 md:p-4 bg-zinc-50 border border-zinc-100 rounded-2xl md:rounded-[20px] gap-4 transition-all hover:border-zinc-300">
+                  <div className="flex items-center gap-4 w-full md:w-auto">
+                    <div className="w-16 h-16 rounded-xl overflow-hidden bg-white border border-zinc-100 shrink-0 shadow-sm">
+                      <img src={car.image ? (car.image.startsWith('http') ? car.image : `https://avtobozor.onrender.com${car.image}`) : '/placeholder.jpg'} alt={car.name} className="w-full h-full object-cover" />
+                    </div>
+                    <div>
+                      <h4 className="font-black text-sm md:text-base uppercase italic text-zinc-900">{car.name}</h4>
+                      <p className="text-xs font-bold text-green-600">{Number(car.price).toLocaleString()} $</p>
+                    </div>
+                  </div>
+
+                  {/* FAOL TUGMALAR QISMI */}
+                  <div className="flex items-center justify-center gap-2 w-full md:w-auto">
+                    {!myCarInfo ? (
+                      <span className="text-[9px] md:text-[10px] font-bold text-zinc-400 uppercase tracking-widest bg-zinc-100 px-3 py-2 rounded-lg text-center w-full md:w-auto border border-zinc-200">
+                        Boshqa sotuvchi
+                      </span>
+                    ) : isWithin15Mins ? (
+                      <button onClick={() => router.push(`/cars/${car.id}/edit`)} className="flex-1 md:w-auto h-11 px-4 bg-blue-50 hover:bg-blue-600 hover:text-white text-blue-600 border border-blue-100 rounded-xl transition-all font-black uppercase text-[10px] tracking-widest flex items-center justify-center gap-2">
+                        <Pencil className="w-4 h-4" /> Tahrirlash
+                      </button>
+                    ) : (
+                      <span className="flex items-center gap-2 text-[9px] md:text-[10px] font-bold text-red-500 uppercase tracking-widest bg-red-50 px-3 py-2 rounded-lg text-center w-full md:w-auto border border-red-100">
+                        <Clock className="w-3 h-3" /> Tahrirlash vaqti tugagan
+                      </span>
+                    )}
+                  </div>
+                </div>
+              );
+            })}
+          </div>
+          
+          {filteredCars.length > visibleCount && (
+            <div className="mt-8 pt-6 border-t border-zinc-100 text-center">
+              <button onClick={() => setVisibleCount(filteredCars.length)} className="inline-flex items-center justify-center h-12 px-8 bg-zinc-900 hover:bg-red-600 text-white rounded-full font-black uppercase text-[10px] md:text-xs tracking-widest transition-all shadow-lg active:scale-95">
+                Barcha e'lonlarni ko'rish ({filteredCars.length - visibleCount} ta qoldi)
+              </button>
+            </div>
+          )}
+        </div>
+      </div>
+    </main>
+  );
+}

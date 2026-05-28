@@ -85,7 +85,7 @@ function NavbarContent() {
             <Heart className="w-4 h-4" />
           </Link>
 
-          <Link href="/admin" className="ml-3">
+          <Link href="/elon-berish" className="ml-3">
             <button className="bg-zinc-900 hover:bg-red-600 text-white font-bold uppercase rounded-xl px-6 h-11 transition-all active:scale-95 shadow-xl shadow-zinc-200 text-[11px] tracking-wider">
               E'lon berish +
             </button>
@@ -137,7 +137,7 @@ function NavbarContent() {
             <Heart className="w-4 h-4 text-red-500 fill-red-500" />
           </Link>
 
-          <Link href="/admin" onClick={() => setIsMobileMenuOpen(false)} className="mt-2">
+          <Link href="/elon-berish" onClick={() => setIsMobileMenuOpen(false)} className="mt-2">
             <button className="w-full bg-zinc-900 hover:bg-red-600 text-white font-bold uppercase rounded-xl px-6 h-11 transition-all active:scale-95 shadow-lg shadow-zinc-200 text-[11px] tracking-wider">
               E'lon berish +
             </button>

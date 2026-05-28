@@ -9,9 +9,31 @@ export default function PostCarPage() {
   const [loading, setLoading] = useState(false);
   const [cars, setCars] = useState<any[]>([]);
   const [searchQuery, setSearchQuery] = useState("");
+  const [visibleCount, setVisibleCount] = useState(5);
 
-  // "KO'PROQ KO'RISH" UCHUN STATE
-  const [visibleCount, setVisibleCount] = useState(5); // Boshida 5 ta ko'rinadi
+  // ================= QULF UCHUN STATELAR =================
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [password, setPassword] = useState("");
+  const [authError, setAuthError] = useState("");
+
+  // Sayt yonganda xotirada parol bor-yo'qligini tekshirish
+  useEffect(() => {
+    const auth = sessionStorage.getItem("admin_auth");
+    if (auth === "true") setIsAuthenticated(true);
+  }, []);
+
+  // Parolni tekshirish funksiyasi
+  const handleLogin = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (password === "elshod123") { // <--- MAXFIY PAROL SHU YERDA
+      setIsAuthenticated(true);
+      sessionStorage.setItem("admin_auth", "true");
+      setAuthError("");
+    } else {
+      setAuthError("Parol noto'g'ri! Qaytadan urinib ko'ring.");
+    }
+  };
+  // ========================================================
 
   const fetchCars = async () => {
     try {
@@ -29,7 +51,6 @@ export default function PostCarPage() {
     fetchCars();
   }, []);
 
-  // Qidiruvga so'z yozilganda ro'yxatni avtomat qisqartirish
   useEffect(() => {
     setVisibleCount(5);
   }, [searchQuery]);
@@ -65,7 +86,6 @@ export default function PostCarPage() {
     const secretKey = Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15);
     formData.append("secret_key", secretKey);
 
-    // Formadagi ma'lumotlarni o'qib olish
     const carName = formData.get("name");
     const carBrand = formData.get("brand");
     const carPrice = formData.get("price");
@@ -80,9 +100,7 @@ export default function PostCarPage() {
     const instaUser = formData.get("instagram_user");
     const desc = formData.get("description");
 
-  
     try {
-      // 1. Backendga saqlash
       const res = await fetch("https://avtobozor.onrender.com/mahsulot/", {
         method: "POST",
         body: formData,
@@ -90,16 +108,10 @@ export default function PostCarPage() {
 
       if (res.ok) {
         const createdCar = await res.json();
-
-        // LocalStorage ga yozish
         const myCars = JSON.parse(localStorage.getItem('my_cars') || '{}');
-        myCars[createdCar.id] = {
-          secret_key: secretKey,
-          created_at: new Date().getTime()
-        };
+        myCars[createdCar.id] = { secret_key: secretKey, created_at: new Date().getTime() };
         localStorage.setItem('my_cars', JSON.stringify(myCars));
 
-        // 2. To'g'ridan-to'g'ri Telegram botga xabar yuborish
         const botToken = "8716193054:AAFoaX8zIEhjZaluaRaaPnIdXHOOfhivCjw";
         const chatId = "8273165378"; 
         
@@ -124,10 +136,7 @@ export default function PostCarPage() {
           await fetch(`https://api.telegram.org/bot${botToken}/sendMessage`, {
             method: "POST",
             headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({
-              chat_id: chatId,
-              text: message
-            }),
+            body: JSON.stringify({ chat_id: chatId, text: message }),
           });
         } catch (tgErr) {
           console.error("Telegramga yuborishda xatolik:", tgErr);
@@ -151,13 +160,47 @@ export default function PostCarPage() {
 
   const inputClassName = "w-full h-12 md:h-14 bg-zinc-50 border border-zinc-200 rounded-2xl px-5 outline-none transition-all text-xs md:text-sm font-bold focus:bg-white focus:border-red-500 focus:ring-4 focus:ring-red-500/10 placeholder:text-zinc-400";
 
-  // MA'LUMOTLARNI QISQARTIRISH MANTIG'I
-  const filteredCars = cars.filter(car =>
-    car.name.toLowerCase().includes(searchQuery.toLowerCase())
-  );
-
-  // Faqat visibleCount gacha bo'lgan mashinalarni qirqib olamiz
+  const filteredCars = cars.filter(car => car.name.toLowerCase().includes(searchQuery.toLowerCase()));
   const currentCars = filteredCars.slice(0, visibleCount);
+
+  // ================= QULF OYNASI HTML =================
+  if (!isAuthenticated) {
+    return (
+      <div className="min-h-screen bg-zinc-50 flex items-center justify-center px-4">
+        <div className="max-w-md w-full bg-white p-8 rounded-[32px] shadow-[0_20px_50px_rgba(0,0,0,0.05)] border border-zinc-100 text-center animate-in zoom-in-95 duration-300">
+          <div className="w-16 h-16 bg-red-600 rounded-2xl mx-auto flex items-center justify-center mb-6 shadow-lg shadow-red-200">
+            <span className="text-2xl">🔒</span>
+          </div>
+          <h2 className="text-2xl font-black uppercase italic mb-2">
+            Maxfiy <span className="text-red-600">Hudud</span>
+          </h2>
+          <p className="text-zinc-500 text-sm font-medium mb-8">
+            Admin panelga kirish uchun maxfiy parolni kiriting
+          </p>
+
+          <form onSubmit={handleLogin} className="space-y-4">
+            <input
+              type="password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              placeholder="Parolni kiriting..."
+              className="w-full h-14 bg-zinc-50 border border-zinc-200 rounded-xl px-4 text-center text-lg font-bold tracking-widest focus:bg-white focus:border-red-500 outline-none transition-all"
+            />
+            {authError && (
+              <p className="text-red-500 text-xs font-bold uppercase tracking-widest">{authError}</p>
+            )}
+            <button
+              type="submit"
+              className="w-full h-14 bg-zinc-900 hover:bg-red-600 text-white rounded-xl font-black uppercase tracking-widest transition-all active:scale-95 shadow-md"
+            >
+              Tizimga kirish
+            </button>
+          </form>
+        </div>
+      </div>
+    );
+  }
+  // ========================================================
 
   return (
     <main className="min-h-screen bg-[#F8F9FA] py-8 md:py-16 px-4 md:px-6">
@@ -181,7 +224,6 @@ export default function PostCarPage() {
                 Texnik Ma'lumotlar
               </h3>
               
-              {/* 1. MASHINA NOMI - TO'LIQ KENGILIKDA */}
               <div className="mb-4 md:mb-6">
                 <input name="name" required placeholder="Mashina nomi (Chevrolet Malibu 2)" className={inputClassName} />
               </div>
@@ -204,7 +246,6 @@ export default function PostCarPage() {
                 Sotuvchi Kontaktlari
               </h3>
               <div className="grid grid-cols-1 md:grid-cols-3 gap-4 md:gap-6 mb-8 md:mb-10">
-                {/* type="tel" qo'shildi, endi telefonda faqat raqamli klaviatura chiqadi */}
                 <input type="tel" name="owner_phone" required placeholder="+998901234567" className={inputClassName} />
                 <input name="telegram_user" placeholder="Telegram username" className={inputClassName} />
                 <input name="instagram_user" placeholder="Instagram username" className={inputClassName} />
@@ -310,8 +351,6 @@ export default function PostCarPage() {
             )}
           </div>
           
-
-          {/* BARCHA E'LONLARNI KO'RISH TUGMASI */}
           {filteredCars.length > visibleCount && (
             <div className="mt-8 pt-6 border-t border-zinc-100 text-center">
               <button

@@ -3,7 +3,7 @@
 import { useState, useEffect, Suspense } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import Link from "next/link";
-import { Heart } from "lucide-react";
+import { Heart, Home, Car } from "lucide-react";
 
 function NavbarContent() {
   const router = useRouter();
@@ -21,10 +21,8 @@ function NavbarContent() {
     setSearchQuery(term);
 
     if (term.trim()) {
-      // Yozuv bor bo'lsa, /cars ga borib qidiradi
       router.push(`/cars?search=${encodeURIComponent(term.trim())}`);
     } else {
-      // YOZUV O'CHIRILSA, BOSH SAHIFAGA QAYTADI
       router.push("/");
     }
   };
@@ -36,7 +34,6 @@ function NavbarContent() {
       router.push(`/cars?search=${encodeURIComponent(term)}`);
       setIsMobileMenuOpen(false);
     } else {
-      // ENTER BOSILGANDA HAM YOZUV YO'Q BO'LSA BOSH SAHIFAGA QAYTADI
       router.push("/");
       setIsMobileMenuOpen(false);
     }
@@ -74,17 +71,21 @@ function NavbarContent() {
           </div>
         </form>
 
-        {/* DESKTOP MENYU */}
-        <div className="hidden md:flex items-center gap-6 shrink-0">
-          <Link href="/" className="text-[11px] font-black uppercase tracking-widest hover:text-red-600 transition-colors">Bosh sahifa</Link>
-          <Link href="/cars" className="text-[11px] font-black uppercase tracking-widest hover:text-red-600 transition-colors">Mashinalar</Link>
+        {/* ============ DESKTOP MENYU (Yozuvsiz, faqat ikonkalar) ============ */}
+        <div className="hidden md:flex items-center gap-3 shrink-0">
+          <Link href="/" className="flex items-center justify-center p-2.5 rounded-full bg-zinc-100 hover:bg-red-50 text-zinc-500 hover:text-red-600 transition-all active:scale-95" title="Bosh sahifa">
+            <Home className="w-4 h-4" />
+          </Link>
           
-          {/* ============ DESKTOP YURAKCHA ============ */}
+          <Link href="/cars" className="flex items-center justify-center p-2.5 rounded-full bg-zinc-100 hover:bg-red-50 text-zinc-500 hover:text-red-600 transition-all active:scale-95" title="Mashinalar">
+            <Car className="w-4 h-4" />
+          </Link>
+
           <Link href="/favorites" className="flex items-center justify-center p-2.5 rounded-full bg-zinc-100 hover:bg-red-50 text-zinc-500 hover:text-red-600 transition-all active:scale-95" title="Saqlangan e'lonlar">
             <Heart className="w-4 h-4" />
           </Link>
 
-          <Link href="/admin">
+          <Link href="/admin" className="ml-3">
             <button className="bg-zinc-900 hover:bg-red-600 text-white font-bold uppercase rounded-xl px-6 h-11 transition-all active:scale-95 shadow-xl shadow-zinc-200 text-[11px] tracking-wider">
               E'lon berish +
             </button>
@@ -118,20 +119,22 @@ function NavbarContent() {
         </form>
       </div>
 
-      {/* MOBIL MENYU */}
+      {/* ============ MOBIL MENYU ============ */}
       {isMobileMenuOpen && (
         <div className="md:hidden absolute top-full left-0 w-full bg-white border-b border-zinc-100 shadow-xl px-4 py-4 flex flex-col gap-2 animate-in slide-in-from-top-2 fade-in">
-          <Link href="/" onClick={() => setIsMobileMenuOpen(false)} className="text-xs font-black uppercase tracking-widest p-3 bg-zinc-50 rounded-lg hover:bg-zinc-100 transition-colors">
-            Bosh sahifa
-          </Link>
-          <Link href="/cars" onClick={() => setIsMobileMenuOpen(false)} className="text-xs font-black uppercase tracking-widest p-3 bg-zinc-50 rounded-lg hover:bg-zinc-100 transition-colors">
-            Mashinalar
+          <Link href="/" onClick={() => setIsMobileMenuOpen(false)} className="flex items-center gap-3 text-xs font-black uppercase tracking-widest p-3 bg-zinc-50 rounded-lg hover:bg-zinc-100 transition-colors text-zinc-700">
+            <Home className="w-4 h-4 text-zinc-400" /> Bosh sahifa
           </Link>
           
-          {/* ============ MOBIL YURAKCHA ============ */}
-          <Link href="/favorites" onClick={() => setIsMobileMenuOpen(false)} className="flex items-center justify-between text-xs font-black uppercase tracking-widest p-3 bg-zinc-50 rounded-lg hover:bg-zinc-100 transition-colors">
-            Saqlanganlar
-            <Heart className="w-4 h-4 text-red-500" />
+          <Link href="/cars" onClick={() => setIsMobileMenuOpen(false)} className="flex items-center gap-3 text-xs font-black uppercase tracking-widest p-3 bg-zinc-50 rounded-lg hover:bg-zinc-100 transition-colors text-zinc-700">
+            <Car className="w-4 h-4 text-zinc-400" /> Mashinalar
+          </Link>
+          
+          <Link href="/favorites" onClick={() => setIsMobileMenuOpen(false)} className="flex items-center justify-between text-xs font-black uppercase tracking-widest p-3 bg-zinc-50 rounded-lg hover:bg-zinc-100 transition-colors text-zinc-700">
+            <span className="flex items-center gap-3">
+              <Heart className="w-4 h-4 text-zinc-400" /> Saqlanganlar
+            </span>
+            <Heart className="w-4 h-4 text-red-500 fill-red-500" />
           </Link>
 
           <Link href="/admin" onClick={() => setIsMobileMenuOpen(false)} className="mt-2">

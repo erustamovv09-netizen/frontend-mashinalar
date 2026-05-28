@@ -3,6 +3,7 @@
 import { useState, useEffect, Suspense } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import Link from "next/link";
+import { Heart } from "lucide-react";
 
 function NavbarContent() {
   const router = useRouter();
@@ -74,9 +75,15 @@ function NavbarContent() {
         </form>
 
         {/* DESKTOP MENYU */}
-        <div className="hidden md:flex items-center gap-8 shrink-0">
+        <div className="hidden md:flex items-center gap-6 shrink-0">
           <Link href="/" className="text-[11px] font-black uppercase tracking-widest hover:text-red-600 transition-colors">Bosh sahifa</Link>
           <Link href="/cars" className="text-[11px] font-black uppercase tracking-widest hover:text-red-600 transition-colors">Mashinalar</Link>
+          
+          {/* ============ DESKTOP YURAKCHA ============ */}
+          <Link href="/favorites" className="flex items-center justify-center p-2.5 rounded-full bg-zinc-100 hover:bg-red-50 text-zinc-500 hover:text-red-600 transition-all active:scale-95" title="Saqlangan e'lonlar">
+            <Heart className="w-4 h-4" />
+          </Link>
+
           <Link href="/admin">
             <button className="bg-zinc-900 hover:bg-red-600 text-white font-bold uppercase rounded-xl px-6 h-11 transition-all active:scale-95 shadow-xl shadow-zinc-200 text-[11px] tracking-wider">
               E'lon berish +
@@ -120,6 +127,13 @@ function NavbarContent() {
           <Link href="/cars" onClick={() => setIsMobileMenuOpen(false)} className="text-xs font-black uppercase tracking-widest p-3 bg-zinc-50 rounded-lg hover:bg-zinc-100 transition-colors">
             Mashinalar
           </Link>
+          
+          {/* ============ MOBIL YURAKCHA ============ */}
+          <Link href="/favorites" onClick={() => setIsMobileMenuOpen(false)} className="flex items-center justify-between text-xs font-black uppercase tracking-widest p-3 bg-zinc-50 rounded-lg hover:bg-zinc-100 transition-colors">
+            Saqlanganlar
+            <Heart className="w-4 h-4 text-red-500" />
+          </Link>
+
           <Link href="/admin" onClick={() => setIsMobileMenuOpen(false)} className="mt-2">
             <button className="w-full bg-zinc-900 hover:bg-red-600 text-white font-bold uppercase rounded-xl px-6 h-11 transition-all active:scale-95 shadow-lg shadow-zinc-200 text-[11px] tracking-wider">
               E'lon berish +
@@ -130,6 +144,7 @@ function NavbarContent() {
     </nav>
   );
 }
+
 export default function Navbar() {
   return (
     <Suspense fallback={<div></div>}>

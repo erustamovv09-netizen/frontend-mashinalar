@@ -125,7 +125,7 @@ export default function CarsPage() {
                 <option value="">Yoqilg'i: Barchasi</option>
                 <option value="Benzin">Benzin</option>
                 <option value="Gaz">Gaz</option>
-                <option value="Elektro">Elektro</option>
+                <option value="Elektr">Elektr</option>
                 <option value="Gibrid">Gibrid</option>
               </select>
             </div>

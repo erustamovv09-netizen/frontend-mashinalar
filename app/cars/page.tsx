@@ -155,16 +155,17 @@ export default function CarsPage() {
             filteredData.map((item: any) => (
               <div key={item.id} className="relative bg-white border border-zinc-200 rounded-2xl md:rounded-[20px] overflow-hidden shadow-sm hover:shadow-xl transition-all duration-300 group flex flex-col">
                 
-                {/* ================= YURAKCHA TUGMASI ================= */}
+                {/* ================= YURAKCHA TUGMASI (To'g'rilandi: Shaffof va Mos) ================= */}
                 <button
                   onClick={(e) => toggleFavorite(e, item.id)}
-                  className="absolute top-3 right-3 z-10 p-2 bg-white/90 backdrop-blur-md rounded-full shadow-md hover:scale-110 transition-transform"
+                  className="absolute top-4 right-4 z-10 transition-transform active:scale-90"
                 >
                   <Heart 
-                    className={`w-5 h-5 transition-colors ${
+                    // Yurakcha rasm ustida ko'rinishi uchun kuchli soyaning (drop-shadow) effekti qo'shildi
+                    className={`w-6 h-6 transition-all drop-shadow-[0_2px_4px_rgba(0,0,0,0.5)] ${ 
                       favorites.includes(item.id) 
-                        ? "fill-red-500 text-red-500" 
-                        : "text-zinc-400"
+                        ? "fill-red-500 text-red-500" // Tanlanganda qizil
+                        : "text-zinc-100 hover:text-red-400" // Oddiy holatda oqishish-kulrang (har qanday mashinada ko'rinadi)
                     }`} 
                   />
                 </button>

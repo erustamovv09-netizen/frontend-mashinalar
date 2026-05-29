@@ -15,25 +15,44 @@ export default function EditCarPublicPage() {
 
     // 1. XAVFSIZLIK VA ESKI MA'LUMOTLARNI TEKSHIRISH
     useEffect(() => {
-        // Brauzer xotirasidan shu e'longa tegishli secret_key bor-yo'qligini tekshiramiz
-        const myCars = JSON.parse(localStorage.getItem("my_cars") || "{}");
-        const carInfo = myCars[id as string];
+        // Brauzer xotirasidagi hamma narsani tekshiramiz: admin paroli kiritilganmi yoki admin kaliti bormi?
+        const hasAdminPass = localStorage.getItem("admin_password") !== null;
+        const hasAdminUser = localStorage.getItem("admin_username") !== null;
+        const isAdminTrue = localStorage.getItem("is_admin") === "true";
+        const hasToken = localStorage.getItem("token") !== null; // Agar backend token saqlagan bo'lsangiz
 
-        if (!carInfo) {
-            alert("Sizda bu e'lonni tahrirlash huquqi yo'q!");
-            router.push("/elon-berish");
-            return;
+        // Agar bulardan birortasi to'g'ri bo'lsa - demak bu SIZ, ya'ni ADMIN!
+        const isAdmin = hasAdminPass || hasAdminUser || isAdminTrue || hasToken;
+
+        let currentSecretKey = "";
+
+        // AGAR ADMIN BO'LMASA, ODDIY FOYDALANUVCHINI TEKSHIRAMIZ
+        if (!isAdmin) {
+            const myCars = JSON.parse(localStorage.getItem("my_cars") || "{}");
+            const carInfo = myCars[id as string];
+
+            if (!carInfo) {
+                alert("Sizda bu e'lonni tahrirlash huquqi yo'q!");
+                router.push("/elon-berish");
+                return;
+            }
+
+            // Oddiy foydalanuvchi uchun 15 minutlik cheklov
+            const timePassed = Date.now() - carInfo.created_at;
+            if (timePassed > 15 * 60 * 1000) {
+                alert("Tahrirlash vaqti (15 daqiqa) tugagan!");
+                router.push("/elon-berish");
+                return;
+            }
+
+            currentSecretKey = carInfo.secret_key;
+            setSecretKey(currentSecretKey);
+        } else {
+            // AGAR ADMIN BO'LSA - barcha cheklovlarni chetlab o'tamiz
+            // Backend admin o'zgartirish kiritganda secret_key so'ramasligi yoki xato bermasligi uchun 
+            // e'lonning o'zidagi eski secret_key ni saqlab turamiz (agar u bazada bo'lsa)
+            setSecretKey("admin_bypass");
         }
-
-        // Agar e'lon qo'shilganiga 15 minutdan o'tib ketgan bo'lsa, tahrirlashga qo'ymaymiz
-        const timePassed = Date.now() - carInfo.created_at;
-        if (timePassed > 15 * 60 * 1000) {
-            alert("Tahrirlash vaqti (15 daqiqa) tugagan!");
-            router.push("/elon-berish");
-            return;
-        }
-
-        setSecretKey(carInfo.secret_key);
 
         const fetchCar = async () => {
             try {
@@ -41,9 +60,13 @@ export default function EditCarPublicPage() {
                 if (res.ok) {
                     const data = await res.json();
                     setCar(data);
+                    // Agar admin bo'lsak va backend baribir secret_key talab qilsa, mashinaning o'zini kalitini olamiz
+                    if (isAdmin && data.secret_key) {
+                        setSecretKey(data.secret_key);
+                    }
                 } else {
                     alert("Mashina topilmadi");
-                    router.push("/elon-berish");
+                    router.push(isAdmin ? "/admin" : "/elon-berish");
                 }
             } catch (error) {
                 console.error("Xatolik:", error);

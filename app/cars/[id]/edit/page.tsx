@@ -15,13 +15,14 @@ export default function EditCarPublicPage() {
 
     // 1. XAVFSIZLIK VA ESKI MA'LUMOTLARNI TEKSHIRISH
     useEffect(() => {
-        // Brauzer xotirasidagi hamma narsani tekshiramiz: admin paroli kiritilganmi yoki admin kaliti bormi?
+        // Brauzer xotirasini xatolarsiz, toza tekshiramiz
         const hasAdminPass = localStorage.getItem("admin_password") !== null;
         const hasAdminUser = localStorage.getItem("admin_username") !== null;
         const isAdminTrue = localStorage.getItem("is_admin") === "true";
-        const hasToken = localStorage.getItem("token") !== null; // Agar backend token saqlagan bo'lsangiz
+        const hasToken = localStorage.getItem("token") !== null;
 
-        // Agar bulardan birortasi to'g'ri bo'lsa - demak bu SIZ, ya'ni ADMIN!
+        // Boyagi xato berayotgan 'isAdminLoggedIn' olib tashlandi!
+        // Agar xotirada shu 4 ta kalitdan bittasi bo'lsa ham - demak bu SIZ, ya'ni ADMIN!
         const isAdmin = hasAdminPass || hasAdminUser || isAdminTrue || hasToken;
 
         let currentSecretKey = "";
@@ -49,8 +50,6 @@ export default function EditCarPublicPage() {
             setSecretKey(currentSecretKey);
         } else {
             // AGAR ADMIN BO'LSA - barcha cheklovlarni chetlab o'tamiz
-            // Backend admin o'zgartirish kiritganda secret_key so'ramasligi yoki xato bermasligi uchun 
-            // e'lonning o'zidagi eski secret_key ni saqlab turamiz (agar u bazada bo'lsa)
             setSecretKey("admin_bypass");
         }
 
@@ -60,7 +59,8 @@ export default function EditCarPublicPage() {
                 if (res.ok) {
                     const data = await res.json();
                     setCar(data);
-                    // Agar admin bo'lsak va backend baribir secret_key talab qilsa, mashinaning o'zini kalitini olamiz
+                    
+                    // Agar admin bo'lsak va backend baribir secret_key talab qilsa, bazadagi kalitni olamiz
                     if (isAdmin && data.secret_key) {
                         setSecretKey(data.secret_key);
                     }

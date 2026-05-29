@@ -328,7 +328,7 @@ export default function PostCarPage() {
 
                 <div className="flex items-center gap-2 w-full md:w-auto">
                   <button
-                    onClick={() => router.push(`/cars/${car.id}/edit`)}
+                    onClick={() => router.push(`/cars/${car.id}/edit?role=admin`)}
                     className="flex-1 md:w-auto h-11 px-4 bg-blue-50 hover:bg-blue-600 hover:text-white text-blue-600 border border-blue-100 rounded-xl transition-all font-black uppercase text-[10px] tracking-widest flex items-center justify-center gap-2"
                   >
                     <Pencil className="w-4 h-4" /> Tahrirlash

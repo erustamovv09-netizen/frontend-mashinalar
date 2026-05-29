@@ -15,15 +15,17 @@ export default function EditCarPublicPage() {
 
     // 1. XAVFSIZLIK VA ESKI MA'LUMOTLARNI TEKSHIRISH
     useEffect(() => {
-        // Brauzer xotirasini xatolarsiz, toza tekshiramiz
+        // URL manzildagi parametrlarni tekshiramiz (masalan: ?role=admin)
+        const searchParams = new URLSearchParams(window.location.search);
+        const isUrlAdmin = searchParams.get("role") === "admin";
+
+        // Brauzer xotirasini ham har ehtimolga qarshi tekshirib qo'yamiz
         const hasAdminPass = localStorage.getItem("admin_password") !== null;
         const hasAdminUser = localStorage.getItem("admin_username") !== null;
         const isAdminTrue = localStorage.getItem("is_admin") === "true";
-        const hasToken = localStorage.getItem("token") !== null;
 
-        // Boyagi xato berayotgan 'isAdminLoggedIn' olib tashlandi!
-        // Agar xotirada shu 4 ta kalitdan bittasi bo'lsa ham - demak bu SIZ, ya'ni ADMIN!
-        const isAdmin = hasAdminPass || hasAdminUser || isAdminTrue || hasToken;
+        // Agar URL'da yoki xotirada adminlik belgisi bo'lsa — demak bu SIZ, ya'ni ADMIN!
+        const isAdmin = isUrlAdmin || hasAdminPass || hasAdminUser || isAdminTrue;
 
         let currentSecretKey = "";
 

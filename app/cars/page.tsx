@@ -48,14 +48,14 @@ export default function CarsPage() {
   // Yurakchani bosganda ishlashi kerak bo'lgan mantiq
   const toggleFavorite = (e: React.MouseEvent, id: number) => {
     e.preventDefault(); // Ichkariga (batafsilga) kirib ketishni to'xtatadi
-    
+
     let newFavs;
     if (favorites.includes(id)) {
       newFavs = favorites.filter((favId) => favId !== id); // O'chirish
     } else {
       newFavs = [...favorites, id]; // Qo'shish
     }
-    
+
     setFavorites(newFavs);
     localStorage.setItem("avtobozor_favorites", JSON.stringify(newFavs)); // Xotiraga yozish
   };
@@ -154,25 +154,32 @@ export default function CarsPage() {
           ) : filteredData.length > 0 ? (
             filteredData.map((item: any) => (
               <div key={item.id} className="relative bg-white border border-zinc-200 rounded-2xl md:rounded-[20px] overflow-hidden shadow-sm hover:shadow-xl transition-all duration-300 group flex flex-col">
-                
+
                 {/* ================= YURAKCHA TUGMASI (To'g'rilandi: Shaffof va Mos) ================= */}
                 <button
                   onClick={(e) => toggleFavorite(e, item.id)}
                   className="absolute top-4 right-4 z-10 transition-transform active:scale-90"
                 >
-                  <Heart 
+                  <Heart
                     // Yurakcha rasm ustida ko'rinishi uchun kuchli soyaning (drop-shadow) effekti qo'shildi
-                    className={`w-6 h-6 transition-all drop-shadow-[0_2px_4px_rgba(0,0,0,0.5)] ${ 
-                      favorites.includes(item.id) 
+                    className={`w-6 h-6 transition-all drop-shadow-[0_2px_4px_rgba(0,0,0,0.5)] ${favorites.includes(item.id)
                         ? "fill-red-500 text-red-500" // Tanlanganda qizil
                         : "text-zinc-100 hover:text-red-400" // Oddiy holatda oqishish-kulrang (har qanday mashinada ko'rinadi)
-                    }`} 
+                      }`}
                   />
                 </button>
 
                 <div className="relative h-48 md:h-52 overflow-hidden bg-zinc-100 shrink-0">
                   <img
-                    src={item.image ? (item.image.startsWith('http') ? item.image : `https://avtobozor.onrender.com${item.image}`) : '/placeholder.jpg'}
+                    src={
+                      item.image
+                        ? item.image.startsWith('http')
+                          ? item.image
+                          : item.image.startsWith('/')
+                            ? `https://avtobozor.onrender.com${item.image}`
+                            : `https://avtobozor.onrender.com/${item.image}` // agar boshida / bo'lmasa, o'zimiz qo'shamiz
+                        : '/placeholder.jpg'
+                    }
                     alt={item.name}
                     className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
                   />

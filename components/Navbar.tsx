@@ -15,15 +15,17 @@ function NavbarContent() {
     setSearchQuery(searchParams.get("search") || "");
   }, [searchParams]);
 
-  // YOZILAYOTGANDA HAM ISHLAYDI
+  // YOZILAYOTGANDA REAL-TIME QIDIRUV (Tarixni buzmaydi va sahifa sakramaydi)
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const term = e.target.value;
     setSearchQuery(term);
 
     if (term.trim()) {
-      router.push(`/cars?search=${encodeURIComponent(term.trim())}`);
+      // router.replace brauzer tarixini to'ldirib tashlamaydi, scroll: false esa sahifani tepaga sakratmaydi
+      router.replace(`/cars?search=${encodeURIComponent(term.trim())}`, { scroll: false });
     } else {
-      router.push("/");
+      // Input butunlay tozalansa, foydalanuvchi /cars sahifasida qoladi va hamma mashinalarni ko'radi
+      router.replace(`/cars`, { scroll: false });
     }
   };
 
@@ -32,11 +34,10 @@ function NavbarContent() {
     const term = searchQuery.trim();
     if (term) {
       router.push(`/cars?search=${encodeURIComponent(term)}`);
-      setIsMobileMenuOpen(false);
     } else {
-      router.push("/");
-      setIsMobileMenuOpen(false);
+      router.push("/cars");
     }
+    setIsMobileMenuOpen(false);
   };
 
   return (
@@ -71,7 +72,7 @@ function NavbarContent() {
           </div>
         </form>
 
-        {/* ============ DESKTOP MENYU (Yozuvsiz, faqat ikonkalar) ============ */}
+        {/* ============ DESKTOP MENYU ============ */}
         <div className="hidden md:flex items-center gap-3 shrink-0">
           <Link href="/" className="flex items-center justify-center p-2.5 rounded-full bg-zinc-100 hover:bg-red-50 text-zinc-500 hover:text-red-600 transition-all active:scale-95" title="Bosh sahifa">
             <Home className="w-4 h-4" />

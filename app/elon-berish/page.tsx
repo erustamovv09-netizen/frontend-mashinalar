@@ -14,7 +14,7 @@ export default function PostCarPublicPage() {
   // Foydalanuvchining o'zi qo'shgan mashinalari, hozirgi vaqt va Adminlikni kuzatish
   const [myCars, setMyCars] = useState<any>({});
   const [currentTime, setCurrentTime] = useState(Date.now());
-  const [isAdmin, setIsAdmin] = useState(false); 
+  const [isAdmin, setIsAdmin] = useState(false); // Admin ekanligingizni saqlash uchun
 
   const fetchCars = async () => {
     try {
@@ -30,18 +30,22 @@ export default function PostCarPublicPage() {
 
   useEffect(() => {
     fetchCars();
+    // Brauzer xotirasidan faqat shu odam qo'shgan mashinalarni o'qib olish
     setMyCars(JSON.parse(localStorage.getItem('my_cars') || '{}'));
 
+    // ADMIN EKANLIGINGIZNI TEKSHIRISH
     const searchParams = new URLSearchParams(window.location.search);
     const isUrlAdmin = searchParams.get("role") === "admin";
     const hasAdminPass = localStorage.getItem("admin_password") !== null;
     const hasAdminUser = localStorage.getItem("admin_username") !== null;
     const isAdminTrue = localStorage.getItem("is_admin") === "true";
 
+    // Agar URL'da yoki xotirada adminlik belgisi bo'lsa — siz admsiz!
     if (isUrlAdmin || hasAdminPass || hasAdminUser || isAdminTrue) {
       setIsAdmin(true);
     }
 
+    // Har daqiqada vaqtni yangilab turish (15 minut o'tganini hisoblash uchun)
     const timer = setInterval(() => setCurrentTime(Date.now()), 60000);
     return () => clearInterval(timer);
   }, []);
@@ -133,15 +137,7 @@ export default function PostCarPublicPage() {
   };
 
   const inputClassName = "w-full h-12 md:h-14 bg-zinc-50 border border-zinc-200 rounded-2xl px-5 outline-none transition-all text-xs md:text-sm font-bold focus:bg-white focus:border-red-500 focus:ring-4 focus:ring-red-500/10 placeholder:text-zinc-400";
-  
-  // XAVFSIZ VA SILLIQ FILTRLASH TIZIMI (TUZATILDI)
-  const filteredCars = cars.filter(car => {
-    const carName = car.name ? String(car.name).toLowerCase() : "";
-    const carBrand = car.brand ? String(car.brand).toLowerCase() : "";
-    const query = searchQuery.toLowerCase();
-    return carName.includes(query) || carBrand.includes(query);
-  });
-
+  const filteredCars = cars.filter(car => car.name.toLowerCase().includes(searchQuery.toLowerCase()));
   const currentCars = filteredCars.slice(0, visibleCount);
 
   return (
@@ -231,8 +227,10 @@ export default function PostCarPublicPage() {
                     </div>
                   </div>
 
+                  {/* FAOL TUGMALAR QISMI - FAQAT ADMIN UCHUN YANGILANDI */}
                   <div className="flex items-center justify-center gap-2 w-full md:w-auto">
                     {isAdmin ? (
+                      /* AGAR ADMIN KIRSA - HAMMA MASHINAGA TAHRIRLASH TUGMASI CHIQADI */
                       <button 
                         onClick={() => router.push(`/cars/${car.id}/edit?role=admin`)} 
                         className="flex-1 md:w-auto h-11 px-4 bg-red-600 hover:bg-red-700 text-white rounded-xl transition-all font-black uppercase text-[10px] tracking-widest flex items-center justify-center gap-2 shadow-md"
@@ -240,10 +238,12 @@ export default function PostCarPublicPage() {
                         <Pencil className="w-4 h-4" /> Tahrirlash (Admin)
                       </button>
                     ) : !myCarInfo ? (
+                      /* ODDDIY ODAM KIRSA VA BOSHQA ODAMNING MASHINASI BO'LSA */
                       <span className="text-[9px] md:text-[10px] font-bold text-zinc-400 uppercase tracking-widest bg-zinc-100 px-3 py-2 rounded-lg text-center w-full md:w-auto border border-zinc-200">
                         Boshqa sotuvchi
                       </span>
                     ) : isWithin15Mins ? (
+                      /* ODDIY ODAM O'Z MASHINASINI 15 MINUT ICHIDA TAHRIRLASA */
                       <button 
                         onClick={() => router.push(`/cars/${car.id}/edit`)} 
                         className="flex-1 md:w-auto h-11 px-4 bg-blue-50 hover:bg-blue-600 hover:text-white text-blue-600 border border-blue-100 rounded-xl transition-all font-black uppercase text-[10px] tracking-widest flex items-center justify-center gap-2"
@@ -251,6 +251,7 @@ export default function PostCarPublicPage() {
                         <Pencil className="w-4 h-4" /> Tahrirlash
                       </button>
                     ) : (
+                      /* ODDIY ODAMNING MASHINASIDA 15 MINUT O'TIB KETGAN BO'LSA */
                       <span className="flex items-center gap-2 text-[9px] md:text-[10px] font-bold text-red-500 uppercase tracking-widest bg-red-50 px-3 py-2 rounded-lg text-center w-full md:w-auto border border-red-100">
                         <Clock className="w-3 h-3" /> Tahrirlash vaqti tugagan
                       </span>

@@ -1,10 +1,14 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, Suspense } from "react";
+import { useSearchParams } from "next/navigation";
 import Link from "next/link";
-import { Search, SlidersHorizontal, ArrowUpDown, Heart } from "lucide-react"; // <-- Heart qo'shildi
+import { Search, SlidersHorizontal, ArrowUpDown, Heart } from "lucide-react";
 
-export default function CarsPage() {
+function CarsPageContent() {
+  const searchParams = useSearchParams();
+  const searchParamQuery = searchParams.get("search") || "";
+
   const [allData, setAllData] = useState<any[]>([]);
   const [filteredData, setFilteredData] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
@@ -19,6 +23,11 @@ export default function CarsPage() {
   const [fuelType, setFuelType] = useState("");
   const [transmission, setTransmission] = useState("");
   const [sortBy, setSortBy] = useState("newest");
+
+  // URL'dan qidiruv so'zi kelganda uni ichki qidiruv oynasiga va filtrga sinxronlash
+  useEffect(() => {
+    setSearchQuery(searchParamQuery);
+  }, [searchParamQuery]);
 
   // Sayt yonganda mashinalarni va xotiradagi yurakchalarni yuklash
   useEffect(() => {
@@ -64,11 +73,17 @@ export default function CarsPage() {
   useEffect(() => {
     let result = [...allData];
 
-    if (searchQuery) result = result.filter(car => car.name.toLowerCase().includes(searchQuery.toLowerCase()) || (car.brand && car.brand.toLowerCase().includes(searchQuery.toLowerCase())));
-    if (minPrice) result = result.filter(car => Number(car.price) >= Number(minPrice));
-    if (maxPrice) result = result.filter(car => Number(car.price) <= Number(maxPrice));
-    if (fuelType) result = result.filter(car => car.fuel_type?.toLowerCase() === fuelType.toLowerCase());
-    if (transmission) result = result.filter(car => car.transmission?.toLowerCase() === transmission.toLowerCase());
+    if (searchQuery) {
+      result = result.filter(
+        (car) =>
+          (car.name && car.name.toLowerCase().includes(searchQuery.toLowerCase())) ||
+          (car.brand && car.brand.toLowerCase().includes(searchQuery.toLowerCase()))
+      );
+    }
+    if (minPrice) result = result.filter((car) => Number(car.price) >= Number(minPrice));
+    if (maxPrice) result = result.filter((car) => Number(car.price) <= Number(maxPrice));
+    if (fuelType) result = result.filter((car) => car.fuel_type?.toLowerCase() === fuelType.toLowerCase());
+    if (transmission) result = result.filter((car) => car.transmission?.toLowerCase() === transmission.toLowerCase());
 
     if (sortBy === "cheap") {
       result.sort((a, b) => Number(a.price) - Number(b.price));
@@ -81,7 +96,8 @@ export default function CarsPage() {
     setFilteredData(result);
   }, [searchQuery, minPrice, maxPrice, fuelType, transmission, sortBy, allData]);
 
-  const inputClass = "w-full h-12 bg-zinc-50 border border-zinc-200 rounded-xl px-4 text-sm font-bold focus:bg-white focus:border-red-500 outline-none transition-all placeholder:text-zinc-400";
+  const inputClass =
+    "w-full h-12 bg-zinc-50 border border-zinc-200 rounded-xl px-4 text-sm font-bold focus:bg-white focus:border-red-500 outline-none transition-all placeholder:text-zinc-400";
 
   return (
     <main className="min-h-screen bg-zinc-50 py-8 md:py-12 px-4 md:px-8">
@@ -102,14 +118,36 @@ export default function CarsPage() {
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
             <div className="lg:col-span-1 relative">
               <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-zinc-400" />
-              <input type="text" placeholder="Mashina nomi..." value={searchQuery} onChange={(e) => setSearchQuery(e.target.value)} className={`${inputClass} pl-10`} />
+              <input
+                type="text"
+                placeholder="Mashina nomi..."
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                className={`${inputClass} pl-10`}
+              />
             </div>
             <div className="flex gap-2">
-              <input type="number" placeholder="Narx: dan ($)" value={minPrice} onChange={(e) => setMinPrice(e.target.value)} className={inputClass} />
-              <input type="number" placeholder="Narx: gacha ($)" value={maxPrice} onChange={(e) => setMaxPrice(e.target.value)} className={inputClass} />
+              <input
+                type="number"
+                placeholder="Narx: dan ($)"
+                value={minPrice}
+                onChange={(e) => setMinPrice(e.target.value)}
+                className={inputClass}
+              />
+              <input
+                type="number"
+                placeholder="Narx: gacha ($)"
+                value={maxPrice}
+                onChange={(e) => setMaxPrice(e.target.value)}
+                className={inputClass}
+              />
             </div>
             <div>
-              <select value={fuelType} onChange={(e) => setFuelType(e.target.value)} className={`${inputClass} appearance-none cursor-pointer`}>
+              <select
+                value={fuelType}
+                onChange={(e) => setFuelType(e.target.value)}
+                className={`${inputClass} appearance-none cursor-pointer`}
+              >
                 <option value="">Yoqilg'i: Barchasi</option>
                 <option value="Benzin">Benzin</option>
                 <option value="Gaz">Gaz</option>
@@ -118,7 +156,11 @@ export default function CarsPage() {
               </select>
             </div>
             <div>
-              <select value={transmission} onChange={(e) => setTransmission(e.target.value)} className={`${inputClass} appearance-none cursor-pointer`}>
+              <select
+                value={transmission}
+                onChange={(e) => setTransmission(e.target.value)}
+                className={`${inputClass} appearance-none cursor-pointer`}
+              >
                 <option value="">Karobka: Barchasi</option>
                 <option value="Avtomat">Avtomat</option>
                 <option value="Mexanika">Mexanika</option>
@@ -135,7 +177,11 @@ export default function CarsPage() {
             </p>
             <div className="flex items-center gap-3 w-full sm:w-auto">
               <ArrowUpDown className="w-4 h-4 text-zinc-400 hidden sm:block" />
-              <select value={sortBy} onChange={(e) => setSortBy(e.target.value)} className="w-full sm:w-auto h-10 bg-zinc-50 border border-zinc-200 rounded-xl px-4 text-xs font-black uppercase tracking-widest focus:bg-white focus:border-red-500 outline-none transition-all cursor-pointer text-zinc-700">
+              <select
+                value={sortBy}
+                onChange={(e) => setSortBy(e.target.value)}
+                className="w-full sm:w-auto h-10 bg-zinc-50 border border-zinc-200 rounded-xl px-4 text-xs font-black uppercase tracking-widest focus:bg-white focus:border-red-500 outline-none transition-all cursor-pointer text-zinc-700"
+              >
                 <option value="newest">Eng yangilari oldin</option>
                 <option value="cheap">Arzonlari oldin</option>
                 <option value="expensive">Qimmatlari oldin</option>
@@ -153,19 +199,21 @@ export default function CarsPage() {
             </div>
           ) : filteredData.length > 0 ? (
             filteredData.map((item: any) => (
-              <div key={item.id} className="relative bg-white border border-zinc-200 rounded-2xl md:rounded-[20px] overflow-hidden shadow-sm hover:shadow-xl transition-all duration-300 group flex flex-col">
-
-                {/* ================= YURAKCHA TUGMASI (To'g'rilandi: Shaffof va Mos) ================= */}
+              <div
+                key={item.id}
+                className="relative bg-white border border-zinc-200 rounded-2xl md:rounded-[20px] overflow-hidden shadow-sm hover:shadow-xl transition-all duration-300 group flex flex-col"
+              >
+                {/* ================= YURAKCHA TUGMASI ================= */}
                 <button
                   onClick={(e) => toggleFavorite(e, item.id)}
                   className="absolute top-4 right-4 z-10 transition-transform active:scale-90"
                 >
                   <Heart
-                    // Yurakcha rasm ustida ko'rinishi uchun kuchli soyaning (drop-shadow) effekti qo'shildi
-                    className={`w-6 h-6 transition-all drop-shadow-[0_2px_4px_rgba(0,0,0,0.5)] ${favorites.includes(item.id)
-                        ? "fill-red-500 text-red-500" // Tanlanganda qizil
-                        : "text-zinc-100 hover:text-red-400" // Oddiy holatda oqishish-kulrang (har qanday mashinada ko'rinadi)
-                      }`}
+                    className={`w-6 h-6 transition-all drop-shadow-[0_2px_4px_rgba(0,0,0,0.5)] ${
+                      favorites.includes(item.id)
+                        ? "fill-red-500 text-red-500"
+                        : "text-zinc-100 hover:text-red-400"
+                    }`}
                   />
                 </button>
 
@@ -173,12 +221,12 @@ export default function CarsPage() {
                   <img
                     src={
                       item.image
-                        ? item.image.startsWith('http')
+                        ? item.image.startsWith("http")
                           ? item.image
-                          : item.image.startsWith('/')
-                            ? `https://avtobozor.onrender.com${item.image}`
-                            : `https://avtobozor.onrender.com/${item.image}` // agar boshida / bo'lmasa, o'zimiz qo'shamiz
-                        : '/placeholder.jpg'
+                          : item.image.startsWith("/")
+                          ? `https://avtobozor.onrender.com${item.image}`
+                          : `https://avtobozor.onrender.com/${item.image}`
+                        : "/placeholder.jpg"
                     }
                     alt={item.name}
                     className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
@@ -220,11 +268,28 @@ export default function CarsPage() {
             ))
           ) : (
             <div className="col-span-1 sm:col-span-2 lg:col-span-3 text-center py-20 bg-white rounded-[24px] border border-zinc-100 shadow-sm">
-              <p className="text-zinc-400 font-black italic uppercase text-sm tracking-widest">Bunday parametrdagi mashina topilmadi</p>
+              <p className="text-zinc-400 font-black italic uppercase text-sm tracking-widest">
+                Bunday parametrdagi mashina topilmadi
+              </p>
             </div>
           )}
         </div>
       </div>
     </main>
+  );
+}
+
+// Next.js build vaqtida "Deopted into client-side rendering" xatosi bermasligi uchun <Suspense> ga o'raymiz
+export default function CarsPage() {
+  return (
+    <Suspense
+      fallback={
+        <div className="min-h-screen bg-zinc-50 flex items-center justify-center">
+          <div className="w-8 h-8 border-4 border-zinc-200 border-t-red-600 rounded-full animate-spin"></div>
+        </div>
+      }
+    >
+      <CarsPageContent />
+    </Suspense>
   );
 }

@@ -33,7 +33,7 @@ function CarsPageContent() {
   useEffect(() => {
     const fetchCars = async () => {
       try {
-        const res = await fetch("https://avtobozor.onrender.com/mahsulot/");
+        const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/mahsulot/`);
         if (res.ok) {
           const data = await res.json();
           setAllData(data);

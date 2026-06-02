@@ -53,7 +53,6 @@ export default async function Home() {
                   </Badge>
                 </div>
               </Link>
-        
 
               <CardHeader>
                 <Link href={`/cars/${item.id}`}>

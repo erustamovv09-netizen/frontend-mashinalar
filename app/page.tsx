@@ -7,7 +7,7 @@ import Partners from "@/components/Partners";
 import Hero from "@/components/Hero";
 
 async function getData() {
-  const res = await fetch("https://avtobozor.onrender.com/mahsulot/", {
+  const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/mahsulot/`, {
     cache: 'no-store',
     next: { revalidate: 0 }
   });
@@ -44,7 +44,7 @@ export default async function Home() {
               <Link href={`/cars/${item.id}`}>
                 <div className="relative aspect-[16/10] overflow-hidden bg-gray-100">
                   <img
-                    src={item.image ? (item.image.startsWith('http') ? item.image : `https://avtobozor.onrender.com${item.image}`) : '/placeholder.jpg'}
+                    src={item.image ? (item.image.startsWith('http') ? item.image : `${process.env.NEXT_PUBLIC_API_URL}${item.image}`) : '/placeholder.jpg'}
                     alt={item.name}
                     className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
                   />

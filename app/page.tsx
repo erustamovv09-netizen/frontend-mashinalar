@@ -71,6 +71,7 @@ export default async function Home() {
                     Batafsil
                   </Link>
                 </div>
+                
               </CardHeader>
             </Card>
           ))}

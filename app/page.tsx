@@ -75,7 +75,6 @@ export default async function Home() {
             </Card>
           ))}
         </div>
-  
         
         {/* BARCHASINI KO'RISH TUGMASI (Saytga pro-ko'rinish beradi) */}
         {data.length > 6 && (

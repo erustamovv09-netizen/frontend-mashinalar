@@ -1,0 +1,17 @@
+asgiref==3.11.1
+certifi==2026.5.20
+charset-normalizer==3.4.7
+cloudinary==1.44.2
+Django==6.0.2
+django-cloudinary-storage==0.3.0
+django-cors-headers==4.9.0
+djangorestframework==3.16.1
+gunicorn==26.0.0
+idna==3.18
+packaging==26.2
+pillow==12.2.0
+psycopg2-binary==2.9.11
+requests==2.34.2
+six==1.17.0
+sqlparse==0.5.5
+urllib3==2.7.0

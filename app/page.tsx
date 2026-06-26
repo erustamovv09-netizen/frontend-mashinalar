@@ -76,7 +76,6 @@ export default async function Home() {
           ))}
         </div>
         
-        
         {/* BARCHASINI KO'RISH TUGMASI (Saytga pro-ko'rinish beradi) */}
         {data.length > 6 && (
           <div className="mt-12 text-center">

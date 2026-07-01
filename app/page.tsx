@@ -85,6 +85,7 @@ export default async function Home() {
             >
               Barcha e'lonlarni ko'rish
             </Link>
+            
           </div>
         )}
 
